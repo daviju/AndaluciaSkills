@@ -1,37 +1,63 @@
 package com.viju.andaluciaskills.services;
 
+import com.viju.andaluciaskills.DTO.UserDTO;
 import com.viju.andaluciaskills.entity.User;
 import com.viju.andaluciaskills.repository.UserRepository;
-
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserBaseService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @Override
+    public UserDTO save(UserDTO dto) {
+        User user = convertToEntity(dto);
+        return convertToDTO(userRepository.save(user));
     }
 
-    public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
+    @Override
+    public Optional<UserDTO> findById(Integer id) {
+        return userRepository.findById(id).map(this::convertToDTO);
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    @Override
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    @Override
+    public UserDTO update(UserDTO dto) {
+        User user = convertToEntity(dto);
+        return convertToDTO(userRepository.save(user));
     }
 
-    public void deleteUser(Integer id) {
+    @Override
+    public void delete(Integer id) {
         userRepository.deleteById(id);
     }
-}
 
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        return userDTO;
+    }
+
+    private User convertToEntity(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        return user;
+    }
+}
