@@ -1,14 +1,13 @@
 package com.viju.andaluciaskills.services.base;
 
+import com.viju.andaluciaskills.DTO.EspecialidadDTO;
 import java.util.List;
 import java.util.Optional;
-import com.viju.andaluciaskills.Dto.DtoEvaluacionItem;
 
-public interface EvaluacionItemBaseService {
-    DtoEvaluacionItem save(DtoEvaluacionItem dto);
-    Optional<DtoEvaluacionItem> findById(Integer id);
-    List<DtoEvaluacionItem> findAll();
-    DtoEvaluacionItem update(DtoEvaluacionItem dto);
+public interface EspecialidadBaseService {
+    EspecialidadDTO save(EspecialidadDTO dto);
+    Optional<EspecialidadDTO> findById(Integer id);
+    List<EspecialidadDTO> findAll();
+    EspecialidadDTO update(EspecialidadDTO dto);
     void delete(Integer id);
 }
-
