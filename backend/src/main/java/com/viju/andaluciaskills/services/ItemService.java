@@ -1,8 +1,8 @@
 package com.viju.andaluciaskills.services;
 
-import com.viju.andaluciaskills.DTO.EvaluacionItemDTO;
-import com.viju.andaluciaskills.entity.EvaluacionItem;
-import com.viju.andaluciaskills.repository.EvaluacionItemRepository;
+import com.viju.andaluciaskills.DTO.ItemDTO;
+import com.viju.andaluciaskills.entity.Item;
+import com.viju.andaluciaskills.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,53 +11,33 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EvaluacionItemService implements EvaluacionItemBaseService {
+public class ItemService {
 
     @Autowired
-    private EvaluacionItemRepository evaluacionItemRepository;
+    private ItemRepository itemRepository;
 
-    @Override
-    public EvaluacionItemDTO save(EvaluacionItemDTO dto) {
-        EvaluacionItem evaluacionItem = convertToEntity(dto);
-        return convertToDTO(evaluacionItemRepository.save(evaluacionItem));
+    public ItemDTO save(ItemDTO dto) {
+        Item item = convertToEntity(dto);
+        return convertToDTO(itemRepository.save(item));
     }
 
-    @Override
-    public Optional<EvaluacionItemDTO> findById(Integer id) {
-        return evaluacionItemRepository.findById(id).map(this::convertToDTO);
+    public Optional<ItemDTO> findById(Integer id) {
+        return itemRepository.findById(id).map(this::convertToDTO);
     }
 
-    @Override
-    public List<EvaluacionItemDTO> findAll() {
-        return evaluacionItemRepository.findAll().stream()
+    public List<ItemDTO> findAll() {
+        return itemRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public EvaluacionItemDTO update(EvaluacionItemDTO dto) {
-        EvaluacionItem evaluacionItem = convertToEntity(dto);
-        return convertToDTO(evaluacionItemRepository.save(evaluacionItem));
+    public ItemDTO update(ItemDTO dto) {
+        Item item = convertToEntity(dto);
+        return convertToDTO(itemRepository.save(item));
     }
 
-    @Override
     public void delete(Integer id) {
-        evaluacionItemRepository.deleteById(id);
+        itemRepository.deleteById(id);
     }
 
-    private EvaluacionItemDTO convertToDTO(EvaluacionItem evaluacionItem) {
-        EvaluacionItemDTO evaluacionItemDTO = new EvaluacionItemDTO();
-        evaluacionItemDTO.setId(evaluacionItem.getId());
-        evaluacionItemDTO.setName(evaluacionItem.getName());
-        evaluacionItemDTO.setDescription(evaluacionItem.getDescription());
-        return evaluacionItemDTO;
-    }
-
-    private EvaluacionItem convertToEntity(EvaluacionItemDTO evaluacionItemDTO) {
-        EvaluacionItem evaluacionItem = new EvaluacionItem();
-        evaluacionItem.setId(evaluacionItemDTO.getId());
-        evaluacionItem.setName(evaluacionItemDTO.getName());
-        evaluacionItem.setDescription(evaluacionItemDTO.getDescription());
-        return evaluacionItem;
-    }
 }

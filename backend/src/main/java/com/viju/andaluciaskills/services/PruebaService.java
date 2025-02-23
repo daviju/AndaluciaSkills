@@ -11,36 +11,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PruebaService implements PruebaBaseService {
+public class PruebaService {
 
     @Autowired
     private PruebaRepository pruebaRepository;
 
-    @Override
     public PruebaDTO save(PruebaDTO dto) {
         Prueba prueba = convertToEntity(dto);
         return convertToDTO(pruebaRepository.save(prueba));
     }
 
-    @Override
     public Optional<PruebaDTO> findById(Integer id) {
         return pruebaRepository.findById(id).map(this::convertToDTO);
     }
 
-    @Override
     public List<PruebaDTO> findAll() {
         return pruebaRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public PruebaDTO update(PruebaDTO dto) {
         Prueba prueba = convertToEntity(dto);
         return convertToDTO(pruebaRepository.save(prueba));
     }
 
-    @Override
     public void delete(Integer id) {
         pruebaRepository.deleteById(id);
     }

@@ -11,36 +11,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserBaseService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Override
     public UserDTO save(UserDTO dto) {
         User user = convertToEntity(dto);
         return convertToDTO(userRepository.save(user));
     }
 
-    @Override
     public Optional<UserDTO> findById(Integer id) {
         return userRepository.findById(id).map(this::convertToDTO);
     }
 
-    @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public UserDTO update(UserDTO dto) {
         User user = convertToEntity(dto);
         return convertToDTO(userRepository.save(user));
     }
 
-    @Override
     public void delete(Integer id) {
         userRepository.deleteById(id);
     }
