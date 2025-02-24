@@ -9,7 +9,7 @@ public class EspecialidadDTO {
     public Integer getIdEspecialidad() {
         return idEspecialidad;
     }
-
+    
     public void setIdEspecialidad(Integer idEspecialidad) {
         this.idEspecialidad = idEspecialidad;
     }
