@@ -1,33 +1,41 @@
 package com.viju.andaluciaskills.DTO;
 
 public class ItemDTO {
-    private Integer id;
-    private String name;
-    private String description;
+    private Integer idItem;
+    private String descripcion;
+    private Integer peso;
+    private Integer gradosConsecucion;
 
-    
     // Getters and Setters
-    public Integer getId() {
-        return id;
+    public Integer getIdItem() {
+        return idItem;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdItem(Integer idItem) {
+        this.idItem = idItem;
     }
 
-    public String getName() {
-        return name;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getPeso() {
+        return peso;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPeso(Integer peso) {
+        this.peso = peso;
+    }
+
+    public Integer getGradosConsecucion() {
+        return gradosConsecucion;
+    }
+
+    public void setGradosConsecucion(Integer gradosConsecucion) {
+        this.gradosConsecucion = gradosConsecucion;
     }
 }

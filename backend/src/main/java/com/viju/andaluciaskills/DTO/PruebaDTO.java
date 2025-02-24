@@ -1,32 +1,44 @@
 package com.viju.andaluciaskills.DTO;
 
 public class PruebaDTO {
-    private Integer id;
-    private String title;
-    private String description;
+    private Integer idPrueba;
+    private String enunciado;
+    private Integer puntuacionMaxima;
+    private Integer especialidad;
 
     // Getters and Setters
-    public Integer getId() {
-        return id;
+    public Integer getIdPrueba() {
+        return idPrueba;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdPrueba(Integer idPrueba) {
+        this.idPrueba = idPrueba;
     }
 
-    public String getTitle() {
-        return title;
+    
+    public String getEnunciado() {
+        return enunciado;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
     }
 
-    public String getDescription() {
-        return description;
+
+    public Integer getPuntuacionMaxima() {
+        return puntuacionMaxima;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPuntuacionMaxima(Integer puntuacionMaxima) {
+        this.puntuacionMaxima = puntuacionMaxima;
+    }
+
+
+    public Integer getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Integer especialidad) {
+        this.especialidad = especialidad;
     }
 }

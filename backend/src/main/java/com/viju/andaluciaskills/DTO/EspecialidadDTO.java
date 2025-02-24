@@ -2,8 +2,8 @@ package com.viju.andaluciaskills.DTO;
 
 public class EspecialidadDTO {
     private Integer id;
-    private String name;
-    private String description;
+    private String nombre;
+    private String codigo;
 
     // Getters and Setters
     public Integer getId() {
@@ -14,19 +14,19 @@ public class EspecialidadDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescription() {
-        return description;
+        return codigo;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 }

@@ -1,34 +1,51 @@
 package com.viju.andaluciaskills.DTO;
 
-import java.time.LocalDate;
-
 public class ParticipanteDTO {
-    private Integer id;
-    private String name;
-    private LocalDate birthDate;
+    private Integer idParticipante;
+    private String nombre;
+    private String apellidos;
+    private String centro;
+    private Integer especialidad;
 
     // Getters and Setters
-    public Integer getId() {
-        return id;
+    public Integer getIdParticipante() {
+        return idParticipante;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdParticipante(Integer idParticipante) {
+        this.idParticipante = idParticipante;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getCentro() {
+        return centro;
+    }
+
+    public void setCentro(String centro) {
+        this.centro = centro;
+    }
+
+    public Integer getEspecialidad() {
+        return especialidad;
+    }
+
+
+    public void setEspecialidad(Integer especialidad) {
+        this.especialidad = especialidad;
     }
 }

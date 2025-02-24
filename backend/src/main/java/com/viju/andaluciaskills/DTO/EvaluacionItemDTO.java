@@ -1,32 +1,44 @@
 package com.viju.andaluciaskills.DTO;
 
 public class EvaluacionItemDTO {
-    private Integer id;
-    private String name;
-    private String description;
+    private Integer idEvaluacionItem;
+    private String Evaluacion;
+    private String Item;
+    private Integer valoracion;
 
     // Getters and Setters
-    public Integer getId() {
-        return id;
+    public Integer getIdEvaluacionItem() {
+        return idEvaluacionItem;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdEvaluacionItem(Integer idEvaluacionItem) {
+        this.idEvaluacionItem = idEvaluacionItem;
     }
 
-    public String getName() {
-        return name;
+    
+    public String getEvaluacion() {
+        return Evaluacion;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEvaluacion(String evaluacion) {
+        this.Evaluacion = evaluacion;
     }
 
-    public String getDescription() {
-        return description;
+
+    public String getItem() {
+        return Item;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setItem(String item) {
+        this.Item = item;
+    }
+
+
+    public Integer getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(Integer valoracion) {
+        this.valoracion = valoracion;
     }
 }
