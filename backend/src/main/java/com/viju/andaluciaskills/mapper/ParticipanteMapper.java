@@ -1,29 +1,26 @@
 package com.viju.andaluciaskills.mapper;
 
-import com.viju.andaluciaskills.DTO.UserDTO;
-import com.viju.andaluciaskills.entity.User;
+import com.viju.andaluciaskills.DTO.ParticipanteDTO;
+import com.viju.andaluciaskills.entity.Participante;
 import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements GenericMapper<User, UserDTO> {
+public class ParticipanteMapper implements GenericMapper<Participante, ParticipanteDTO> {
 
     @Autowired
     private EspecialidadRepository especialidadRepository;
 
     @Override
-    public UserDTO toDto(User entity) {
+    public ParticipanteDTO toDto(Participante entity) {
         if (entity == null) return null;
 
-        UserDTO dto = new UserDTO();
-        dto.setIdUser(entity.getIdUser());
-        dto.setRole(entity.getRole());
-        dto.setUsername(entity.getUsername());
-        dto.setPassword(entity.getPassword());
+        ParticipanteDTO dto = new ParticipanteDTO();
+        dto.setIdParticipante(entity.getIdParticipante());
         dto.setNombre(entity.getNombre());
         dto.setApellidos(entity.getApellidos());
-        dto.setDni(entity.getDni());
+        dto.setCentro(entity.getCentro());
         
         if (entity.getEspecialidad() != null) {
             dto.setEspecialidad(entity.getEspecialidad().getIdEspecialidad());
@@ -33,17 +30,14 @@ public class UserMapper implements GenericMapper<User, UserDTO> {
     }
 
     @Override
-    public User toEntity(UserDTO dto) {
+    public Participante toEntity(ParticipanteDTO dto) {
         if (dto == null) return null;
 
-        User entity = new User();
-        entity.setIdUser(dto.getIdUser());
-        entity.setRole(dto.getRole());
-        entity.setUsername(dto.getUsername());
-        entity.setPassword(dto.getPassword());
+        Participante entity = new Participante();
+        entity.setIdParticipante(dto.getIdParticipante());
         entity.setNombre(dto.getNombre());
         entity.setApellidos(dto.getApellidos());
-        entity.setDni(dto.getDni());
+        entity.setCentro(dto.getCentro());
 
         if (dto.getEspecialidad() != null) {
             especialidadRepository.findById(dto.getEspecialidad())

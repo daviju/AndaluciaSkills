@@ -18,7 +18,7 @@ public class EvaluacionDTO {
     }
 
 
-    public Integer getidParticipante() {
+    public Integer getIdParticipante() {
         return idParticipante;
     }
 

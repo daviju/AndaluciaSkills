@@ -23,17 +23,17 @@ public class EvaluacionMapper implements GenericMapper<Evaluacion, EvaluacionDTO
         if (entity == null) return null;
 
         EvaluacionDTO dto = new EvaluacionDTO();
-        dto.setIdEvaluacion(entity.getIdEvaluacion());
+        dto.setId(entity.getIdEvaluacion());
         dto.setNotaFinal(entity.getNotaFinal());
         
         if (entity.getParticipante() != null) {
-            dto.setParticipanteId(entity.getParticipante().getIdParticipante());
+            dto.setIdParticipante(entity.getParticipante().getIdParticipante());
         }
         if (entity.getPrueba() != null) {
-            dto.setPruebaId(entity.getPrueba().getIdPrueba());
+            dto.setIdPrueba(entity.getPrueba().getIdPrueba());
         }
         if (entity.getUsuario() != null) {
-            dto.setUsuarioId(entity.getUsuario().getIdUser());
+            dto.setIdUser(entity.getUsuario().getIdUser());
         }
         
         return dto;
@@ -44,19 +44,19 @@ public class EvaluacionMapper implements GenericMapper<Evaluacion, EvaluacionDTO
         if (dto == null) return null;
 
         Evaluacion entity = new Evaluacion();
-        entity.setIdEvaluacion(dto.getIdEvaluacion());
+        entity.setIdEvaluacion(dto.getId());
         entity.setNotaFinal(dto.getNotaFinal());
 
-        if (dto.getParticipanteId() != null) {
-            participanteRepository.findById(dto.getParticipanteId())
+        if (dto.getIdParticipante() != null) {
+            participanteRepository.findById(dto.getIdParticipante())
                 .ifPresent(entity::setParticipante);
         }
-        if (dto.getPruebaId() != null) {
-            pruebaRepository.findById(dto.getPruebaId())
+        if (dto.getIdPrueba() != null) {
+            pruebaRepository.findById(dto.getIdPrueba())
                 .ifPresent(entity::setPrueba);
         }
-        if (dto.getUsuarioId() != null) {
-            userRepository.findById(dto.getUsuarioId())
+        if (dto.getIdUser() != null) {
+            userRepository.findById(dto.getIdUser())
                 .ifPresent(entity::setUsuario);
         }
 

@@ -2,8 +2,8 @@ package com.viju.andaluciaskills.DTO;
 
 public class EvaluacionItemDTO {
     private Integer idEvaluacionItem;
-    private String Evaluacion;
-    private String Item;
+    private Integer evaluacion;
+    private Integer item;
     private Integer valoracion;
 
     // Getters and Setters
@@ -15,24 +15,21 @@ public class EvaluacionItemDTO {
         this.idEvaluacionItem = idEvaluacionItem;
     }
 
-    
-    public String getEvaluacion() {
-        return Evaluacion;
+    public Integer getEvaluacion() {
+        return evaluacion;
     }
 
-    public void setEvaluacion(String evaluacion) {
-        this.Evaluacion = evaluacion;
+    public void setEvaluacion(Integer evaluacion) {
+        this.evaluacion = evaluacion;
     }
 
-
-    public String getItem() {
-        return Item;
+    public Integer getItem() {
+        return item;
     }
 
-    public void setItem(String item) {
-        this.Item = item;
+    public void setItem(Integer item) {
+        this.item = item;
     }
-
 
     public Integer getValoracion() {
         return valoracion;

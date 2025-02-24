@@ -26,7 +26,7 @@ public class EspecialidadMapper implements GenericMapper<Especialidad, Especiali
         Especialidad entity = new Especialidad();
         entity.setIdEspecialidad(dto.getIdEspecialidad());
         entity.setNombre(dto.getNombre());
-        entity.setCodigo(dto.getCodigo());
+        entity.setCodigo(dto.getDescription());
         
         return entity;
     }
