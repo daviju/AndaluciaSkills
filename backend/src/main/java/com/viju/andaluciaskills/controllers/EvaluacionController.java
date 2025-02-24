@@ -2,37 +2,50 @@ package com.viju.andaluciaskills.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 
 import com.viju.andaluciaskills.services.EvaluacionService;
-import com.viju.andaluciaskills.entity.Evaluacion;
+import com.viju.andaluciaskills.DTO.EvaluacionDTO;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/evaluaciones")
+@RequestMapping("/api/evaluaciones")
 public class EvaluacionController {
 
     @Autowired
     private EvaluacionService evaluacionService;
 
     @GetMapping
-    public List<Evaluacion> getAllEvaluaciones() {
-        return evaluacionService.getAllEvaluaciones();
+    @ResponseStatus(HttpStatus.OK)
+    public List<EvaluacionDTO> findAll() {
+        return evaluacionService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Evaluacion> getEvaluacionById(@PathVariable Integer id) {
-        return evaluacionService.getEvaluacionById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<EvaluacionDTO> findById(@PathVariable Integer id) {
+        return evaluacionService.findById(id);
     }
 
     @PostMapping
-    public Evaluacion createEvaluacion(@RequestBody Evaluacion evaluacion) {
-        return evaluacionService.saveEvaluacion(evaluacion);
+    @ResponseStatus(HttpStatus.CREATED)
+    public EvaluacionDTO save(@RequestBody EvaluacionDTO evaluacion) {
+        return evaluacionService.save(evaluacion);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EvaluacionDTO update(@RequestBody EvaluacionDTO evaluacion, @PathVariable Integer id) {
+        evaluacion.setId(id);
+        return evaluacionService.update(evaluacion);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvaluacion(@PathVariable Integer id) {
-        evaluacionService.deleteEvaluacion(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        evaluacionService.delete(id);
     }
 }
 

@@ -2,42 +2,50 @@ package com.viju.andaluciaskills.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 
 import com.viju.andaluciaskills.services.UserService;
-import com.viju.andaluciaskills.entity.User;
+import com.viju.andaluciaskills.DTO.UserDTO;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDTO> findAll() {
+        return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Integer id) {
-        return userService.getUserById(id);
-    }
-
-    @GetMapping("/username/{username}")
-    public Optional<User> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<UserDTO> findById(@PathVariable Integer id) {
+        return userService.findById(id);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDTO save(@RequestBody UserDTO user) {
+        return userService.save(user);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO update(@RequestBody UserDTO user, @PathVariable Integer id) {
+        user.setIdUser(id);
+        return userService.update(user);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        userService.delete(id);
     }
 }
 
