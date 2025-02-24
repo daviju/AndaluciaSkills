@@ -1,40 +1,66 @@
 package com.viju.andaluciaskills.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import com.viju.andaluciaskills.DTO.AuthRequestDTO;
+import com.viju.andaluciaskills.DTO.AuthResponseDTO;
+import com.viju.andaluciaskills.DTO.UserRegisterDTO;
 import com.viju.andaluciaskills.entity.User;
 import com.viju.andaluciaskills.repository.UserRepository;
-
-import jakarta.servlet.http.HttpSession;
+import com.viju.andaluciaskills.security.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // Implementar lógica de login
-        return ResponseEntity.ok().body(/* token o respuesta */);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO) {
+        User user = userRepository.findByUsername(authRequestDTO.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(authRequestDTO.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        String token = jwtTokenProvider.createToken(user.getUsername(), user.getRole());
+        AuthResponseDTO response = new AuthResponseDTO();
+        response.setToken(token);
+        response.setUsername(user.getUsername());
+        response.setRole(user.getRole());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.ok().body(savedUser);
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
+        if (userRepository.existsByUsername(userRegisterDTO.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        User user = new User();
+        user.setUsername(userRegisterDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+        user.setRole(userRegisterDTO.getRole());
+
+        userRepository.save(user);
+
+        String token = jwtTokenProvider.createToken(user.getUsername(), user.getRole());
+        AuthResponseDTO response = new AuthResponseDTO();
+        response.setToken(token);
+        response.setUsername(user.getUsername());
+        response.setRole(user.getRole());
+
+        return ResponseEntity.ok(response);
     }
 }
