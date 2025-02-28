@@ -1,41 +1,26 @@
 package com.viju.andaluciaskills.DTO;
 
+import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * DTO para manejar evaluaciones de items.
+ * Usamos @JsonProperty para mapear nombres de JSON a variables Java.
+ */
+
+@Data
 public class EvaluacionItemDTO {
     private Integer idEvaluacionItem;
-    private Integer evaluacion;
-    private Integer item;
+
+    @JsonProperty("evaluacion_id_evaluacion")
+    private Integer evaluacion_idEvaluacion;
+
+    @JsonProperty("item_id_item")
+    private Integer item_idItem;
+    
+    @JsonProperty("prueba_id_prueba")
+    private Integer prueba_id_prueba;
+
     private Integer valoracion;
 
-    // Getters and Setters
-    public Integer getIdEvaluacionItem() {
-        return idEvaluacionItem;
-    }
-
-    public void setIdEvaluacionItem(Integer idEvaluacionItem) {
-        this.idEvaluacionItem = idEvaluacionItem;
-    }
-
-    public Integer getEvaluacion() {
-        return evaluacion;
-    }
-
-    public void setEvaluacion(Integer evaluacion) {
-        this.evaluacion = evaluacion;
-    }
-
-    public Integer getItem() {
-        return item;
-    }
-
-    public void setItem(Integer item) {
-        this.item = item;
-    }
-
-    public Integer getValoracion() {
-        return valoracion;
-    }
-
-    public void setValoracion(Integer valoracion) {
-        this.valoracion = valoracion;
-    }
 }

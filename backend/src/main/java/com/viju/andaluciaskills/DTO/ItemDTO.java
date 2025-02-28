@@ -1,41 +1,17 @@
 package com.viju.andaluciaskills.DTO;
 
+import lombok.Data;
+
+@Data
 public class ItemDTO {
     private Integer idItem;
     private String descripcion;
     private Integer peso;
-    private Integer gradosConsecucion;
+    private Integer grados_consecucion;
+    
+    private Integer prueba_id_prueba;
 
-    // Getters and Setters
-    public Integer getIdItem() {
-        return idItem;
-    }
+    // Para sacar al mejor puntuado
+    private Double puntuacionMaxima;
 
-    public void setIdItem(Integer idItem) {
-        this.idItem = idItem;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Integer getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Integer peso) {
-        this.peso = peso;
-    }
-
-    public Integer getGradosConsecucion() {
-        return gradosConsecucion;
-    }
-
-    public void setGradosConsecucion(Integer gradosConsecucion) {
-        this.gradosConsecucion = gradosConsecucion;
-    }
 }

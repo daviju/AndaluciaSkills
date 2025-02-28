@@ -4,6 +4,7 @@ import com.viju.andaluciaskills.DTO.EspecialidadDTO;
 import com.viju.andaluciaskills.entity.Especialidad;
 import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import com.viju.andaluciaskills.mapper.EspecialidadMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+@Service // Indicamos que esta clase es un servicio de SpringBoot
 public class EspecialidadService {
 
     @Autowired

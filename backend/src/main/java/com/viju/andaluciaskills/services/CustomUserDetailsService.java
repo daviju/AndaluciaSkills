@@ -1,8 +1,12 @@
-package com.viju.andaluciaskills.security;
+package com.viju.andaluciaskills.services;
 
 import com.viju.andaluciaskills.entity.User;
 import com.viju.andaluciaskills.repository.UserRepository;
+
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,8 +20,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("1. CustomUserDetailsService - Buscando usuario: " + username);
+        
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+                .orElseThrow(() -> {
+                    System.out.println("2. CustomUserDetailsService -Usuario no encontrado: " + username);
+                    return new UsernameNotFoundException("Usuario no encontrado: " + username);
+                });
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), 
+                user.getPassword(), 
+                Collections.singletonList(new  SimpleGrantedAuthority(user.getRole()))
+            );
     }
 }

@@ -1,51 +1,23 @@
 package com.viju.andaluciaskills.DTO;
 
+import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * DTO para manejar participantes.
+ * Usamos @JsonProperty para mapear nombres de JSON a variables Java.
+ */
+
+@Data
 public class ParticipanteDTO {
     private Integer idParticipante;
     private String nombre;
     private String apellidos;
     private String centro;
-    private Integer especialidad;
 
-    // Getters and Setters
-    public Integer getIdParticipante() {
-        return idParticipante;
-    }
+    @JsonProperty("especialidad_id_especialidad")
+    private Integer especialidad_idEspecialidad;
 
-    public void setIdParticipante(Integer idParticipante) {
-        this.idParticipante = idParticipante;
-    }
+    private String nombreEspecialidad;
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getCentro() {
-        return centro;
-    }
-
-    public void setCentro(String centro) {
-        this.centro = centro;
-    }
-
-    public Integer getEspecialidad() {
-        return especialidad;
-    }
-
-
-    public void setEspecialidad(Integer especialidad) {
-        this.especialidad = especialidad;
-    }
 }
