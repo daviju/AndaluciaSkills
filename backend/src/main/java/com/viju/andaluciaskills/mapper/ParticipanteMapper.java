@@ -2,7 +2,9 @@ package com.viju.andaluciaskills.mapper;
 
 import com.viju.andaluciaskills.DTO.ParticipanteDTO;
 import com.viju.andaluciaskills.entity.Participante;
+import com.viju.andaluciaskills.entity.Especialidad;
 import com.viju.andaluciaskills.repository.EspecialidadRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,8 @@ public class ParticipanteMapper implements GenericMapper<Participante, Participa
         dto.setCentro(entity.getCentro());
         
         if (entity.getEspecialidad() != null) {
-            dto.setEspecialidad(entity.getEspecialidad().getIdEspecialidad());
+           dto.setEspecialidad_idEspecialidad(entity.getEspecialidad().getIdEspecialidad());
+           dto.setNombreEspecialidad(entity.getEspecialidad().getNombre());
         }
         
         return dto;
@@ -39,9 +42,10 @@ public class ParticipanteMapper implements GenericMapper<Participante, Participa
         entity.setApellidos(dto.getApellidos());
         entity.setCentro(dto.getCentro());
 
-        if (dto.getEspecialidad() != null) {
-            especialidadRepository.findById(dto.getEspecialidad())
-                .ifPresent(entity::setEspecialidad);
+        if (dto.getEspecialidad_idEspecialidad() != null) {
+            Especialidad especialidad = especialidadRepository.findById(dto.getEspecialidad_idEspecialidad()).orElse(null);
+
+            entity.setEspecialidad(especialidad);
         }
 
         return entity;

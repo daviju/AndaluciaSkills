@@ -57,6 +57,8 @@ public class AuthController {
             description = "Usuario no encontrado"
         )
     })
+
+    
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO) {
         try {

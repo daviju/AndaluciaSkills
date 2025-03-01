@@ -1,6 +1,7 @@
 package com.viju.andaluciaskills.mapper;
 
 import com.viju.andaluciaskills.DTO.UserDTO;
+import com.viju.andaluciaskills.entity.Especialidad;
 import com.viju.andaluciaskills.entity.User;
 import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class UserMapper implements GenericMapper<User, UserDTO> {
         
         if (entity.getEspecialidad() != null) {
             dto.setEspecialidad(entity.getEspecialidad().getIdEspecialidad());
+            dto.setNombreEspecialidad(entity.getEspecialidad().getNombre());
         }
         
         return dto;
@@ -46,8 +48,9 @@ public class UserMapper implements GenericMapper<User, UserDTO> {
         entity.setDni(dto.getDni());
 
         if (dto.getEspecialidad() != null) {
-            especialidadRepository.findById(dto.getEspecialidad())
-                .ifPresent(entity::setEspecialidad);
+            Especialidad especialidad = especialidadRepository.findById(dto.getEspecialidad()).orElse(null);
+            
+            entity.setEspecialidad(especialidad);
         }
 
         return entity;

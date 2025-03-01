@@ -1,6 +1,7 @@
 package com.viju.andaluciaskills.mapper;
 
 import com.viju.andaluciaskills.DTO.PruebaDTO;
+import com.viju.andaluciaskills.entity.Especialidad;
 import com.viju.andaluciaskills.entity.Prueba;
 import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> {
         dto.setEnunciado(entity.getEnunciado());
         dto.setPuntuacionMaxima(entity.getPuntuacionMaxima());
         
-        if (entity.getEspecialidad() != null) {
-            dto.setEspecialidad(entity.getEspecialidad().getIdEspecialidad());
+        if (entity.getEspecialidad_idEspecialidad() != null) {
+            dto.setEspecialidad_idEspecialidad(entity.getEspecialidad_idEspecialidad());
         }
         
         return dto;
@@ -37,9 +38,10 @@ public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> {
         entity.setEnunciado(dto.getEnunciado());
         entity.setPuntuacionMaxima(dto.getPuntuacionMaxima());
 
-        if (dto.getEspecialidad() != null) {
-            especialidadRepository.findById(dto.getEspecialidad())
-                .ifPresent(entity::setEspecialidad);
+        if (dto.getEspecialidad_idEspecialidad() != null) {
+            Especialidad especialidad = especialidadRepository.findById(dto.getEspecialidad_idEspecialidad()).orElse(null);
+
+            entity.setEspecialidad_idEspecialidad(especialidad != null ? especialidad.getIdEspecialidad() : null);
         }
 
         return entity;

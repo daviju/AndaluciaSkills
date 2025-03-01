@@ -2,36 +2,21 @@ package com.viju.andaluciaskills.mapper;
 
 import com.viju.andaluciaskills.DTO.EvaluacionItemDTO;
 import com.viju.andaluciaskills.entity.EvaluacionItem;
-import com.viju.andaluciaskills.repository.EvaluacionRepository;
-import com.viju.andaluciaskills.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
-@Component
-public class EvaluacionItemMapper implements GenericMapper<EvaluacionItem, EvaluacionItemDTO> {
-
-    @Autowired
-    private EvaluacionRepository evaluacionRepository;
-    
-    @Autowired
-    private ItemRepository itemRepository;
+@Component // Anotación para indicar que esta clase es un componente
+public class EvaluacionItemMapper implements GenericMapper<EvaluacionItem, EvaluacionItemDTO> { // Implementa la interfaz GenericMapper con los tipos EvaluacionItem y EvaluacionItemDTO
 
     @Override
-    public EvaluacionItemDTO toDto(EvaluacionItem entity) {
+    public EvaluacionItemDTO toDto(EvaluacionItem entity) { // Método para convertir una entidad EvaluacionItem en un DTO EvaluacionItemDTO
         if (entity == null) return null;
 
         EvaluacionItemDTO dto = new EvaluacionItemDTO();
         dto.setIdEvaluacionItem(entity.getIdEvaluacionItem());
         dto.setValoracion(entity.getValoracion());
-        
-        if (entity.getEvaluacion() != null) {
-            dto.setEvaluacion(entity.getEvaluacion().getIdEvaluacion());
-        }
-        
-        if (entity.getItem() != null) {
-            dto.setItem(entity.getItem().getIdItem());
-        }
-        
+        dto.setEvaluacion_idEvaluacion(entity.getEvaluacion_idEvaluacion());
+        dto.setItem_idItem(entity.getItem_idItem()); 
         return dto;
     }
 
@@ -42,16 +27,8 @@ public class EvaluacionItemMapper implements GenericMapper<EvaluacionItem, Evalu
         EvaluacionItem entity = new EvaluacionItem();
         entity.setIdEvaluacionItem(dto.getIdEvaluacionItem());
         entity.setValoracion(dto.getValoracion());
-
-        if (dto.getEvaluacion() != null) {
-            evaluacionRepository.findById(dto.getEvaluacion())
-                .ifPresent(entity::setEvaluacion);
-        }
-
-        if (dto.getItem() != null) {
-            itemRepository.findById(dto.getItem())
-                .ifPresent(entity::setItem);
-        }
+        entity.setEvaluacion_idEvaluacion(dto.getEvaluacion_idEvaluacion());
+        entity.setItem_idItem(dto.getItem_idItem());
 
         return entity;
     }

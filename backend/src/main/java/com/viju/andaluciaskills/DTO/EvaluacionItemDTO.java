@@ -21,6 +21,6 @@ public class EvaluacionItemDTO {
     @JsonProperty("prueba_id_prueba")
     private Integer prueba_id_prueba;
 
-    private Integer valoracion;
+    private Double valoracion;
 
 }

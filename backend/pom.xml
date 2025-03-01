@@ -12,7 +12,7 @@
 	<artifactId>andaluciaskills</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>andaluciaskills</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Proyecto Andaluciaskills</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -31,78 +31,135 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<!-- Proporciona soporte para acceso a datos con JPA -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		
 		<dependency>
+			<!-- Implementa autenticación y autorización para la aplicación -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 		<dependency>
+			<!-- Motor de plantillas para generación de vistas HTML -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+
 		<dependency>
+			<!-- Proporciona funcionalidades para crear aplicaciones web REST -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
+			<!-- Integración de Thymeleaf con Spring Security -->
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
 
 		<dependency>
+			<!-- Herramienta para recarga automática en desarrollo -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
+			<!-- Base de datos en memoria para pruebas y desarrollo -->
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
+			<!-- Driver JDBC para conexión con MariaDB -->
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
+			<!-- Reduce código repetitivo mediante anotaciones -->
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
+			<!-- Framework para pruebas unitarias e integración -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
+			<!-- Facilita la escritura de pruebas para Spring Security -->
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
+			<!-- API Servlet para aplicaciones web Java -->
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
+			<!-- API para validación de datos en Jakarta EE -->
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 			<version>3.0.2</version>
 		</dependency>
+
 		<dependency>
+			<!-- Implementación de validaciones para formularios y datos -->
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.0.Final</version>
 		</dependency>
 
 		<dependency>
+			<!-- Documenta APIs REST con OpenAPI/Swagger UI -->
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<!-- Biblioteca para creación y manipulación de archivos PDF -->
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.2</version>
+		</dependency>
+
+		<dependency>
+			<!-- API para crear y validar tokens JWT (JSON Web Tokens) -->
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<dependency>
+			<!-- Implementación de la API JWT para procesamiento de tokens -->
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Integración de Jackson con JWT para serialización JSON -->
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
