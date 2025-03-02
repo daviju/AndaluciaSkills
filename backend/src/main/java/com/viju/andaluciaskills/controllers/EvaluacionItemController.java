@@ -23,12 +23,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.viju.andaluciaskills.services.EvaluacionItemService;
 import com.viju.andaluciaskills.DTO.EvaluacionItemDTO;
-import com.viju.andaluciaskills.entity.Evaluacion;
-import com.viju.andaluciaskills.exceptions.*;
 import com.viju.andaluciaskills.exceptions.evaluacionitem.EvaluacionItemBadRequestException;
 import com.viju.andaluciaskills.exceptions.evaluacionitem.EvaluacionItemNotFoundException;
 import com.viju.andaluciaskills.exceptions.evaluacionitem.SearchEvaluacionItemNoResultException;
@@ -190,21 +187,47 @@ public class EvaluacionItemController {
     public ResponseEntity<EvaluacionItemDTO> modificarEvaluacionItem(
             @PathVariable Integer id, 
             @RequestBody EvaluacionItemDTO evaluacionItemDTO) {
-        
-        if (!id.equals(evaluacionItemDTO.getIdEvaluacionItem())) {
-            throw new EvaluacionItemBadRequestException("El ID del item no coincide con el ID proporcionado");
+        try {
+            if (!id.equals(evaluacionItemDTO.getIdEvaluacionItem())) {
+                throw new EvaluacionItemBadRequestException("El ID del item no coincide con el ID proporcionado");
+            }
+            return ResponseEntity.ok(
+                evaluacionItemService.findById(id)
+                    .map(e -> {
+                        try {
+                            evaluacionItemDTO.setIdEvaluacionItem(id);
+                            return evaluacionItemService.save(evaluacionItemDTO);
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    })
+                    .orElseThrow(() -> new EvaluacionItemNotFoundException(id))
+            );
+        } catch (Exception e) {
+            System.err.println("Error modificando item: " + e.getMessage());
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error al modificar el item: " + e.getMessage());
         }
-        
-        return ResponseEntity.ok(
-            evaluacionItemService.findById(id)
-                .map(e -> {
-                    evaluacionItemDTO.setIdEvaluacionItem(id);
-                    return evaluacionItemService.save(evaluacionItemDTO);
-                })
-                .orElseThrow(() -> new EvaluacionItemNotFoundException(id))
-        );
     }
 
-    
+
+    // ELIMINAR ITEM EVALUACION
+    @Operation(summary = "Eliminar un item de evaluación existente", description = "Elimina un item existente con el ID proporcionado")
+
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Item eliminado con éxtito"),
+        @ApiResponse(responseCode = "404", description = "Item no encontrado")
+    })
+
+    @DeleteMapping("/eliminarEvaluacionItem/{id}")
+    public ResponseEntity<?> eliminarEvaluacionItem(@PathVariable Integer id) {
+        
+        evaluacionItemService.findById(id).orElseThrow(() -> new EvaluacionItemNotFoundException(id));
+
+        evaluacionItemService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
 
