@@ -2,11 +2,11 @@ package com.viju.andaluciaskills.services;
 
 import com.viju.andaluciaskills.DTO.*;
 import com.viju.andaluciaskills.entity.*;
+import com.viju.andaluciaskills.exceptions.prueba.PruebaNotFoundException;
 import com.viju.andaluciaskills.repository.*;
 import com.viju.andaluciaskills.mapper.EvaluacionMapper;
 import com.viju.andaluciaskills.mapper.ItemMapper;
 import com.viju.andaluciaskills.mapper.PruebaMapper;
-import com.viju.andaluciaskills.Errors.PruebaNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
