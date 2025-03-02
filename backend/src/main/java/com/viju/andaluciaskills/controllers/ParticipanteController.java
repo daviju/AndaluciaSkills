@@ -42,7 +42,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participantes no encontrados")
     })
 
-    @GetMapping("/buscarParticipantes")
+    @GetMapping("/buscarparticipantes")
     public ResponseEntity<List<ParticipanteDTO>> buscarParticipantes() {
         
         List<ParticipanteDTO> participantes = participanteService.findAll();
@@ -63,7 +63,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participante no encontrado")
     })
 
-    @GetMapping("/buscarParticipante/{id}")
+    @GetMapping("/buscarparticipante/{id}")
     public ResponseEntity<ParticipanteDTO> buscarParticipante(@PathVariable Integer id) {
         
         return participanteService.findById(id)
@@ -84,7 +84,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "400", description = "Participante no creado")
     })
 
-    @PostMapping("/crearParticipante")
+    @PostMapping("/crearparticipante")
     public ResponseEntity<ParticipanteDTO> crearParticipante(@Valid @RequestBody ParticipanteDTO participanteDTO) {
         
         if (participanteDTO.getIdParticipante() != null) {
@@ -104,7 +104,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participante no encontrado")
     })
 
-    @PutMapping("/modificarParticipante/{id}")
+    @PutMapping("/modificarparticipante/{id}")
     public ResponseEntity<ParticipanteDTO> modificarParticipante(@PathVariable Integer id, @Valid @RequestBody ParticipanteDTO participanteDTO) {
         
         if(participanteDTO.getIdParticipante() != null && !participanteDTO.getIdParticipante().equals(id)) { // Si el ID proporcionado es distinto al ID del participante
@@ -127,7 +127,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participante no encontrado")
     })
 
-    @DeleteMapping("/eliminarParticipante/{id}")
+    @DeleteMapping("/eliminarparticipante/{id}")
     public ResponseEntity<?> eliminarParticipante(@PathVariable Integer id) {
         
         participanteService.findById(id).orElseThrow(() -> new ParticipanteNotFoundException(id));
@@ -145,7 +145,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participantes no encontrados")
     })
 
-    @GetMapping("/buscarParticipantesPorEspecialidad/{idEspecialidad}")
+    @GetMapping("/buscarparticipantesespecialidad/{idEspecialidad}")
     public ResponseEntity<List<ParticipanteDTO>> buscarParticipantesPorEspecialidad(@PathVariable Integer idEspecialidad) {
         
         List<ParticipanteDTO> participantes = participanteService.findByEspecialidad(idEspecialidad);

@@ -1,21 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LogoComponent } from './logo/logo.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './componentes/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LogoComponent, CommonModule, FormsModule, NavbarComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent],
+  template: `
+    <app-navbar></app-navbar>
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent {
-  title = 'skills';
-  nombre : string;
-
-  constructor () {
-    this.nombre = 'Mi Webo';
-  }
+  title = 'frontend';
 }

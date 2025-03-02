@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ListaCompetidoresComponent } from './lista-competidores/lista-competidores.component';
-import { LoginComponent } from './login/login.component';
+import { ListaCompetidoresComponent } from './componentes/lista-competidores/lista-competidores.component';
+import { LoginComponent } from './componentes/login/login.component';
 
 export const routes: Routes = [
     { path: '', component: ListaCompetidoresComponent, pathMatch: 'full' },
