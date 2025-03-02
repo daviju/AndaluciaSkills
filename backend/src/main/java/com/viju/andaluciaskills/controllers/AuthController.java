@@ -82,8 +82,9 @@ public class AuthController {
                 user.getApellidos(), 
                 user.getNombre(), 
                 user.getEspecialidadId(), 
-                user.getId()
+                user.getIdUser()
             ));
+
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new AuthResponseDTO(null, null, null, null, null, null, null));

@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.viju.andaluciaskills.services.ItemService;
 import com.viju.andaluciaskills.DTO.ItemDTO;
@@ -98,7 +97,6 @@ public class ItemController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(itemService.save(itemDTO));
-        }
     }
 
 

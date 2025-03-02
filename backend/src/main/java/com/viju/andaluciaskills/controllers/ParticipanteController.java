@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/participantes")
 @CrossOrigin(origins = "http://localhost:4200")
-RequiredArgsConstructor
+@RequiredArgsConstructor
 @Tag(name = "Participantes", description = "API para gestionar los participantes de la plataforma")
 public class ParticipanteController {
 
@@ -50,6 +50,8 @@ public class ParticipanteController {
         if (participantes.isEmpty()) {
             throw new SearchParticipanteNoResultException();
         }
+
+        return ResponseEntity.ok(participantes);
     }
 
 

@@ -18,8 +18,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.viju.andaluciaskills.security.JwtFilter;
+
+import java.util.Arrays;
+
 @Configuration // Clase de Configuración de seguridad
 @EnableWebSecurity // Habilita la seguridad web
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Autowired // Inyección de dependencias
@@ -47,9 +52,10 @@ public class SecurityConfig {
 
                         // Rutas de administrador (SOLO ROLE_ADMIN)
                         .requestMatchers("/api/especialidades/**").hasRole("ADMIN")
-                        .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/expertos/**").hasRole("ADMIN")
 
+                        // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -71,24 +77,14 @@ public class SecurityConfig {
     // Este metodo permite el acceso del frontend (Angular)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        // Esto hace que cualquier origen pueda acceder
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("*"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        
         // Crea una fuente de configuración de CORS que se utilizará en la aplicación
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        // Crea una configuración CORS personalizada
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Permite el uso de credenciales (como cookies o cabeceras de autenticación)
-        config.setAllowCredentials(true);
-
-        // Define los orígenes permitidos (dominios desde los cuales se puede acceder a los recursos)
-        config.addAllowedOrigin("http://localhost:4200");
-        config.addAllowedOrigin("http://andaluciaskills.local");
-
-        // Permite todos los encabezados (headers) en las solicitudes entrantes
-        config.addAllowedHeader("*");
-
-        // Permite todos los métodos HTTP (GET, POST, PUT, DELETE, etc.)
-        config.addAllowedMethod("*");
 
         // Registra la configuración de CORS para todas las rutas ("/**")
         source.registerCorsConfiguration("/**", config);
