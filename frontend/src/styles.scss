@@ -1,11 +1,7 @@
-/* Importaciones principales */
-@use 'sass:math';
-@use '@angular/material' as mat;
-
-/* Bootstrap y otras librerías */
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/bootstrap-icons/font/bootstrap-icons';
-@import '../node_modules/animate.css/animate.min';
+/* Importaciones de Bootstrap y librerías */
+@forward 'bootstrap/scss/bootstrap';
+@forward 'bootstrap-icons/font/bootstrap-icons.css';
+@forward 'animate.css/animate.min.css';
 
 /* Variables globales */
 :root {
@@ -40,20 +36,4 @@ body {
 
 .shadow-lg {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-}
-
-/* Animaciones */
-.fade-in {
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
