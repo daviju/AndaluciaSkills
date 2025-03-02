@@ -1,16 +1,59 @@
-/* Importaciones de librerías usando la nueva sintaxis */
-@use 'bootstrap/scss/bootstrap' as bootstrap;
-@use 'bootstrap-icons/font/bootstrap-icons.css';
-@use 'animate.css' as animate;
+/* Importaciones principales */
+@use 'sass:math';
+@use '@angular/material' as mat;
+
+/* Bootstrap y otras librerías */
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons';
+@import '../node_modules/animate.css/animate.min';
 
 /* Variables globales */
 :root {
-  --primary-color: #2563eb;
-  --secondary-color: #64748b;
-  --background-color: #f8fafc;
+  --primary: #2563eb;
+  --secondary: #64748b;
+  --success: #22c55e;
+  --info: #3b82f6;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --light: #f8fafc;
+  --dark: #0f172a;
 }
 
 /* Estilos globales */
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--light);
+}
+
+/* Utilidades */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
