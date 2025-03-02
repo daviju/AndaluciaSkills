@@ -1,0 +1,16 @@
+/* Importaciones de librerías usando la nueva sintaxis */
+@use 'bootstrap/scss/bootstrap' as bootstrap;
+@use 'bootstrap-icons/font/bootstrap-icons.css';
+@use 'animate.css' as animate;
+
+/* Variables globales */
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #64748b;
+  --background-color: #f8fafc;
+}
+
+/* Estilos globales */
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
