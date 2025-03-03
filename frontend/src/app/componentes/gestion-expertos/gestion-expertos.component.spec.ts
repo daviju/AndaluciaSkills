@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GestionExpertosComponent } from '../gestion-expertos/gestion-expertos.component';
+import { GestionarExpertosComponent } from '../gestion-expertos/gestion-expertos.component';
 
 describe('GestionarExpertosComponent', () => {
-  let component: GestionExpertosComponent;
-  let fixture: ComponentFixture<GestionExpertosComponent>;
+  let component: GestionarExpertosComponent;
+  let fixture: ComponentFixture<GestionarExpertosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GestionExpertosComponent]
+      imports: [GestionarExpertosComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GestionExpertosComponent);
+    fixture = TestBed.createComponent(GestionarExpertosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
