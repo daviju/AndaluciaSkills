@@ -45,7 +45,7 @@ public class EvaluacionController {
         @ApiResponse(responseCode = "404", description = "No se encontraron evaluaciones")
     })
 
-    @GetMapping("/listaevaluaciones")
+    @GetMapping
     public ResponseEntity<List<EvaluacionDTO>> obtenerEvaluaciones() {
         List<EvaluacionDTO> evaluaciones = evaluacionService.findAll();
 

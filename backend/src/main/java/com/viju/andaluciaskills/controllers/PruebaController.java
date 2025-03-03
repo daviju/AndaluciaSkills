@@ -68,7 +68,7 @@ public class PruebaController {
         @ApiResponse(responseCode = "404", description = "Pruebas no encontradas")
     })
 
-    @GetMapping("/buscarPruebas")
+    @GetMapping
     public ResponseEntity<List<PruebaDTO>> buscarPruebas() {
 
         return ResponseEntity.ok(pruebaService.findAll());

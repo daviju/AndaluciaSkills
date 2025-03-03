@@ -46,7 +46,7 @@ public class ItemController {
         @ApiResponse(responseCode = "404", description = "Items no encontrados")
     })
 
-    @GetMapping("/buscarItems")
+    @GetMapping
     public ResponseEntity<List<ItemDTO>> buscarItems() {
 
         List<ItemDTO> items = itemService.findAll();

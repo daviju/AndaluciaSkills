@@ -40,7 +40,7 @@ public class EspecialidadController {
             @ApiResponse(responseCode = "404", description = "No se encontraron especialidades")
     })
 
-    @GetMapping("/listarespecialidades")
+    @GetMapping
     public ResponseEntity<List<EspecialidadDTO>> obtenerEspecialidades() {
         List<EspecialidadDTO> especialidades = especialidadService.findAll();
 

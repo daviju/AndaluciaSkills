@@ -42,7 +42,7 @@ public class ParticipanteController {
         @ApiResponse(responseCode = "404", description = "Participantes no encontrados")
     })
 
-    @GetMapping("/buscarparticipantes")
+    @GetMapping
     public ResponseEntity<List<ParticipanteDTO>> buscarParticipantes() {
         
         List<ParticipanteDTO> participantes = participanteService.findAll();
