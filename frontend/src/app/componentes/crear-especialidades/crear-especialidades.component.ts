@@ -22,8 +22,7 @@ interface Especialidad {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule,
-    ToastrModule
+    RouterModule
   ],
   providers: [FormBuilder]
 })
@@ -97,7 +96,7 @@ export class CrearEspecialidadComponent implements OnInit {
       this.especialidadService.crearEspecialidad(especialidad).pipe(
         tap(() => {
           this.toastr.success('Especialidad creada con éxito', 'Éxito');
-          this.router.navigate(['/admin/especialidades']);
+          this.router.navigate(['http://localhost:4200/']);
         }),
         catchError(error => {
           console.error('Error al crear la especialidad:', error);
