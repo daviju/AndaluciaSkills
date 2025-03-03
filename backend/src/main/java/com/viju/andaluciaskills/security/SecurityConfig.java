@@ -77,11 +77,12 @@ public class SecurityConfig {
     // Este metodo permite el acceso del frontend (Angular)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // Esto hace que cualquier origen pueda acceder
+        // Configuración específica de CORS
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("*"));
-        config.setAllowedMethods(Arrays.asList("*"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origen específico de Angular
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(true); // Permite credenciales
         
         // Crea una fuente de configuración de CORS que se utilizará en la aplicación
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -92,5 +93,4 @@ public class SecurityConfig {
         // Devuelve la fuente de configuración de CORS
         return source;
     }
-
 }

@@ -10,20 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
-/*
-                    * Clase JwtFilter
- * Extraer el token JWT del encabezado de la solicitud.
- * Validar el token, verificando su firma y expiración.
- * Autenticar al usuario, estableciendo su identidad en el contexto de seguridad.
- * Permitir o denegar el acceso a recursos protegidos según los permisos del usuario.
-
- * Es un filtro de seguridad que garantiza que solo los usuarios con un JWT válido puedan acceder a ciertas partes de la aplicación.
-*/
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -34,11 +25,27 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        boolean isParticipantesPath = pathMatcher.match("/api/participantes/**", path);
+        System.out.println("Checking path: " + path + ", isParticipantesPath: " + isParticipantesPath);
+        return isParticipantesPath;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        
         System.out.println("1. JwtFilter - Procesando request para: " + request.getRequestURI());
+        System.out.println("Method: " + request.getMethod());
+        System.out.println("Headers: ");
+        request.getHeaderNames().asIterator()
+            .forEachRemaining(headerName -> 
+                System.out.println(headerName + ": " + request.getHeader(headerName)));
 
         String token = extractToken(request);
         if (token != null) {
@@ -65,19 +72,10 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * Extrae el token JWT del encabezado "Authorization" de la solicitud HTTP.
-     * El formato esperado es "Bearer [token]".
-     *
-     * @param request La solicitud HTTP
-     * @return El token JWT sin el prefijo "Bearer " o null si no se encuentra
-     */
-
-    // Extrae el token del header "Authorization: Bearer <token>"
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasLength(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // Elimina "Bearer "
+            return bearerToken.substring(7);
         }
         return null;
     }
