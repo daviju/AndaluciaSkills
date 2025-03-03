@@ -1,6 +1,7 @@
 // Variables
 $primary-gradient: linear-gradient(45deg, #2c5364, #203a43);
 $navbar-height: 70px;
+$logo-size: 40px;
 
 .custom-navbar {
   background: rgba(255, 255, 255, 0.95);
@@ -28,10 +29,41 @@ $navbar-height: 70px;
 
   .navbar-brand {
     padding: 0.5rem 1rem;
-    
-    img {
-      height: 40px;
-      animation: logoFloat 6s ease-in-out infinite;
+    width: $logo-size;
+    height: $logo-size;
+    display: block;
+    background: url('../../../assets/logo.png') no-repeat center center;
+    background-size: contain;
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: logoFloat 6s ease-in-out infinite;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.3) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+
+    &:hover::after {
+      opacity: 1;
+      transform: rotate(45deg) translate(50%, 50%);
     }
   }
 
