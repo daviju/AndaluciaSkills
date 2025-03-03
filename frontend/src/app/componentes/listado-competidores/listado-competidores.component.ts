@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { ParticipantesService } from '../../services/participantes/participantes.service';
+import { ParticipantesService } from '../../services/participantes/participantes.service';  // Cambiado aquí
 
 @Component({
   selector: 'app-lista-competidores',
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule
   ],
   templateUrl: './listado-competidores.component.html',
   styleUrls: ['./listado-competidores.component.css']
@@ -17,14 +15,14 @@ export class ListaCompetidoresComponent implements OnInit {
   competidores: any[] = [];
   error: string = '';
 
-  constructor(private participantesService: ParticipantesService) { }
+  constructor(private participantesService: ParticipantesService) { }  // Cambiado aquí
 
   ngOnInit(): void {
     this.obtenerCompetidores();
   }
 
   obtenerCompetidores(): void {
-    this.participantesService.getParticipantes().subscribe({
+    this.participantesService.getParticipantes().subscribe({  // Cambiado aquí
       next: (data) => {
         this.competidores = data;
         console.log('Competidores cargados:', data);
