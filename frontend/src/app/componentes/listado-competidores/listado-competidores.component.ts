@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { CompetidorService } from '../../services/competidor/competidor.service';
+import { ParticipantesService } from '../../services/participantes/participantes.service';
 
 @Component({
   selector: 'app-lista-competidores',
@@ -17,14 +17,14 @@ export class ListaCompetidoresComponent implements OnInit {
   competidores: any[] = [];
   error: string = '';
 
-  constructor(private competidorService: CompetidorService) { }
+  constructor(private participantesService: ParticipantesService) { }
 
   ngOnInit(): void {
     this.obtenerCompetidores();
   }
 
   obtenerCompetidores(): void {
-    this.competidorService.getCompetidores().subscribe({
+    this.participantesService.getParticipantes().subscribe({
       next: (data) => {
         this.competidores = data;
         console.log('Competidores cargados:', data);

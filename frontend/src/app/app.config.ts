@@ -1,11 +1,29 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpRequest, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthService } from './services/auth/auth.service';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }),
-              provideRouter(routes),
-              provideHttpClient()]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    AuthService, // Proporcionamos AuthService a nivel de aplicación
+    provideHttpClient(
+      withInterceptors([
+        (request: HttpRequest<unknown>, next) => {
+          const authService = inject(AuthService); // Inyectamos la instancia existente
+          const token = authService.getToken();
+          
+          if (token) {
+            const authReq = request.clone({
+              headers: request.headers.set('Authorization', `Bearer ${token}`)
+            });
+            return next(authReq);
+          }
+          return next(request);
+        }
+      ])
+    )
+  ]
 };
