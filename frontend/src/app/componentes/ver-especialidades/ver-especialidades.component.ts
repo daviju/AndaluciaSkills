@@ -4,7 +4,7 @@ import { EspecialidadService } from '../../services/especialidad/especialidad.se
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-ver-especialidad',
+  selector: 'app-ver-especialidades',
   standalone: true,
   imports: [CommonModule],
   template: `
