@@ -1,21 +1,37 @@
 .login-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-  padding: 20px;
+  background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+  position: relative;
+}
+
+// Efecto de partículas en el fondo
+.login-container::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+  animation: particleMove 20s linear infinite;
 }
 
 .login-card {
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 40px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  animation: fadeIn 0.5s ease-out;
+  transform: translateY(0);
+  animation: cardFloat 6s ease-in-out infinite;
 }
 
 .login-header {
@@ -23,20 +39,26 @@
   margin-bottom: 35px;
 
   h2 {
-    color: #2d3748;
+    background: linear-gradient(45deg, #2c5364, #203a43);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-size: 2.2rem;
     margin-bottom: 10px;
     font-weight: 700;
+    animation: titlePulse 2s ease-in-out infinite;
   }
 
   p {
     color: #718096;
     font-size: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards 0.5s;
   }
 }
 
 .form-group {
   margin-bottom: 25px;
+  position: relative;
 
   label {
     display: block;
@@ -44,27 +66,53 @@
     color: #4a5568;
     font-weight: 500;
     font-size: 0.95rem;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+  }
+
+  // Iconos en los inputs
+  &::before {
+    font-family: 'Font Awesome 6 Free';
+    position: absolute;
+    left: 15px;
+    top: 38px;
+    font-size: 1.1rem;
+    color: #718096;
+    z-index: 1;
+    font-weight: 900;
+  }
+
+  &:nth-child(1)::before {
+    content: '\f007'; // Icono de usuario
+  }
+
+  &:nth-child(2)::before {
+    content: '\f023'; // Icono de candado
   }
 
   input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 16px 12px 45px;
     border: 2px solid #e2e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: #f8fafc;
+    background: white;
 
     &:focus {
       outline: none;
-      border-color: #4c6ef5;
-      box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.1);
-      background: white;
+      border-color: #2c5364;
+      box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1);
+      transform: translateY(-2px);
+
+      & + label {
+        transform: translateY(-2px);
+      }
     }
 
     &.is-invalid {
       border-color: #e53e3e;
-      background-color: #fff5f5;
+      animation: shake 0.5s ease-in-out;
     }
   }
 
@@ -73,6 +121,7 @@
     font-size: 0.875rem;
     margin-top: 5px;
     display: none;
+    animation: fadeIn 0.3s ease-out;
   }
 
   input.is-invalid + .invalid-feedback {
@@ -84,72 +133,108 @@
   width: 100%;
   padding: 14px;
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #4c6ef5 0%, #3b5bdb 100%);
+  border-radius: 12px;
+  background: linear-gradient(45deg, #2c5364, #203a43);
   color: white;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   }
 
   &:disabled {
     background: #cbd5e0;
     cursor: not-allowed;
     transform: none;
-  }
-}
-
-.forgot-password {
-  text-align: center;
-  margin: 20px 0;
-
-  a {
-    color: #4c6ef5;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #364fc7;
-      text-decoration: underline;
+    
+    &::before {
+      display: none;
     }
-  }
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 25px 0;
-
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #e2e8f0;
   }
 
   span {
-    padding: 0 15px;
-    color: #718096;
-    font-size: 0.9rem;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+}
+
+.error-message {
+  background: rgba(229, 62, 62, 0.1);
+  color: #e53e3e;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+// Animaciones
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
   }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -157,13 +242,43 @@
   }
 }
 
-// Estilos responsivos
-@media (max-width: 480px) {
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes particleMove {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
+}
+
+// Media queries para asegurar que no haya scroll
+@media (max-height: 600px) {
   .login-card {
-    padding: 30px 20px;
+    padding: 20px;
+    max-height: 90vh;
   }
 
-  .login-header h2 {
-    font-size: 1.8rem;
+  .login-header {
+    margin-bottom: 20px;
+    
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
   }
 }

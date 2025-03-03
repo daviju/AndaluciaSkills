@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth/auth.service'; // Importamos el
   standalone: true,                  // Indica que es un componente independiente
   imports: [CommonModule, RouterLink], // Módulos necesarios para el funcionamiento
   templateUrl: './navbar.component.html', // Plantilla HTML asociada
-  styleUrls: ['./navbar.component.css']   // Estilos CSS asociados
+  styleUrls: ['./navbar.component.scss']   // Estilos CSS asociados
 })
 export class NavbarComponent {
   /**
