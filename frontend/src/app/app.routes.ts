@@ -8,7 +8,7 @@ import { CrearExpertosComponent } from './componentes/crear-expertos/crear-exper
 import { VerExpertosComponent } from './componentes/ver-expertos/ver-expertos.component';
 
 // ESPECIALIDAD
-import { GestionEspecialidadesComponent } from './componentes/gestion-especialidades/gestion-especialidades.component';
+import { GestionarEspecialidadesComponent } from './componentes/gestion-especialidades/gestion-especialidades.component';
 import { CrearEspecialidadesComponent } from './componentes/crear-especialidades/crear-especialidades.component';
 import { VerEspecialidadComponent } from './componentes/ver-especialidades/ver-especialidades.component';
 
@@ -37,7 +37,7 @@ export const routes: Routes = [
 
   // Rutas de administrador
   { path: 'admin', children: [
-    { path: 'especialidades', component: GestionEspecialidadesComponent },
+    { path: 'especialidades', component: GestionarEspecialidadesComponent },
     { path: 'crear-especialidad', component: CrearEspecialidadesComponent },
     { path: 'editar-especialidad/:id', component: CrearEspecialidadesComponent },
     { path: 'expertos', component: GestionExpertosComponent },

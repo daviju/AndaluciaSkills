@@ -6,8 +6,8 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-gestionar-especialidades',
-  templateUrl: '../../componentes/gestion-especialidades/gestion-especialidades.component.html',
-  styleUrls: ['../../componentes/gestion-especialidades/gestion-especialidades.component.scss'],
+  templateUrl: './gestion-especialidades.component.html',
+  styleUrls: ['./gestion-especialidades.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule]
 })
@@ -25,7 +25,10 @@ export class GestionarEspecialidadesComponent implements OnInit {
 
   obtenerEspecialidades(): void {
     this.especialidadService.getEspecialidades().subscribe(
-      data => this.especialidades = data,
+      data => {
+        this.especialidades = data;
+        console.log('Especialidades cargadas:', data);
+      },
       error => console.error('Error al obtener especialidades:', error)
     );
   }

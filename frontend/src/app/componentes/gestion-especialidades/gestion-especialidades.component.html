@@ -1,30 +1,50 @@
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Gestionar Especialidades</h2>
-    <div class="d-flex justify-content-end mb-3">
-      <button class="btn btn-primary" routerLink="/admin/crear-especialidad">Crear Especialidad</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table custom-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Código</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let especialidad of especialidades">
-            <td>{{ especialidad.idEspecialidad }}</td>
-            <td>{{ especialidad.nombre }}</td>
-            <td>{{ especialidad.codigo }}</td>
-            <td>
-              <button class="btn btn-info btn-sm" (click)="verEspecialidad(especialidad.idEspecialidad)">Ver</button>
-              <button class="btn btn-warning btn-sm" (click)="editarEspecialidad(especialidad.idEspecialidad)">Editar</button>
-              <button class="btn btn-danger btn-sm" (click)="borrarEspecialidad(especialidad.idEspecialidad)">Borrar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="page-container">
+    <div class="content-card">
+      <div class="content-header">
+        <h2>Gestión de Especialidades</h2>
+        <p>Administra las especialidades de AndaluciaSkills</p>
+      </div>
+  
+      <div class="actions-bar">
+        <button class="btn-primary" routerLink="/admin/crear-especialidad">
+          <i class="fas fa-plus"></i> Nueva Especialidad
+        </button>
+      </div>
+  
+      <div class="table-container" *ngIf="especialidades.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Código</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let especialidad of especialidades">
+              <td>{{especialidad.idEspecialidad}}</td>
+              <td>{{especialidad.nombre}}</td>
+              <td>{{especialidad.codigo}}</td>
+              <td class="actions-cell">
+                <button class="btn-icon btn-info" (click)="verEspecialidad(especialidad.idEspecialidad)" title="Ver detalles">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn-icon btn-warning" (click)="editarEspecialidad(especialidad.idEspecialidad)" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-danger" (click)="borrarEspecialidad(especialidad.idEspecialidad)" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div *ngIf="especialidades.length === 0" class="empty-state">
+        <i class="fas fa-folder-open"></i>
+        <p>No hay especialidades registradas</p>
+      </div>
     </div>
   </div>
