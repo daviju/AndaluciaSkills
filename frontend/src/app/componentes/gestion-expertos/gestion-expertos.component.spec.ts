@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GestionExpertosComponent } from './gestion-expertos.component';
+import { GestionExpertosComponent } from '../gestion-expertos/gestion-expertos.component';
 
-describe('GestionExpertosComponent', () => {
+describe('GestionarExpertosComponent', () => {
   let component: GestionExpertosComponent;
   let fixture: ComponentFixture<GestionExpertosComponent>;
 
