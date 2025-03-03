@@ -1,97 +1,147 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EspecialidadService } from '../../services/especialidad/especialidad.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+interface Especialidad {
+  nombre: string;
+  codigo: string;
+}
 
 @Component({
   selector: 'app-crear-especialidad',
   templateUrl: '../crear-especialidades/crear-especialidades.component.html',
+  styleUrls: ['../crear-especialidades/crear-especialidades.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule
+  ]
 })
 export class CrearEspecialidadComponent implements OnInit {
-  especialidad: any = {
-    nombre: '',
-    codigo: ''
-  };
-  isEditing = false;
-  nombreError: string = '';
-  codigoError: string = '';
+  especialidadForm: FormGroup = this.initForm(); // Inicializamos directamente aquí
+  isSubmitting: boolean = false;
 
   constructor(
+    private fb: FormBuilder,
     private especialidadService: EspecialidadService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private toastr: ToastrService
+  ) {}
 
-  ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-    if (id) {
-      this.isEditing = true;
-      this.especialidadService.getEspecialidad(id).subscribe(
-        data => {
-          this.especialidad = data;
-        }
-      );
-    }
+  ngOnInit(): void {
+    // Si necesitamos inicializar algo adicional
   }
 
-  validarCodigo(codigo: string): { isValid: boolean, message: string } {
-    if (!codigo) {
-      return { isValid: false, message: 'El código es obligatorio' };
-    }
-    
-    codigo = codigo.trim();
-    
-    if (codigo.length > 4) {
-      return { isValid: false, message: 'El código no puede tener más de 4 caracteres' };
-    }
-
-    return { isValid: true, message: '' };
+  private initForm(): FormGroup {
+    return this.fb.group({
+      nombre: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50)
+      ]],
+      codigo: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(10),
+        Validators.pattern('^[A-Z0-9]+$') // Solo letras mayúsculas y números
+      ]]
+    });
   }
 
-  onCodigoChange() {
-    if (this.especialidad.codigo) {
-      const validacion = this.validarCodigo(this.especialidad.codigo);
-      this.codigoError = validacion.message;
+  // Getters para facilitar el acceso a los controles del formulario
+  get nombreControl() {
+    return this.especialidadForm.get('nombre');
+  }
+
+  get codigoControl() {
+    return this.especialidadForm.get('codigo');
+  }
+
+  // Validadores personalizados para los mensajes de error
+  getErrorMessage(controlName: string): string {
+    const control = this.especialidadForm.get(controlName);
+    if (control?.errors) {
+      if (control.errors['required']) {
+        return `El ${controlName} es requerido`;
+      }
+      if (control.errors['minlength']) {
+        return `El ${controlName} debe tener al menos ${control.errors['minlength'].requiredLength} caracteres`;
+      }
+      if (control.errors['maxlength']) {
+        return `El ${controlName} no puede tener más de ${control.errors['maxlength'].requiredLength} caracteres`;
+      }
+      if (control.errors['pattern']) {
+        return 'El código solo puede contener letras mayúsculas y números';
+      }
+    }
+    return '';
+  }
+
+  onSubmit(): void {
+    if (this.especialidadForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+      const especialidad: Especialidad = this.especialidadForm.value;
+      
+      this.especialidadService.crearEspecialidad(especialidad).pipe(
+        tap(() => {
+          this.toastr.success('Especialidad creada con éxito', 'Éxito');
+          this.router.navigate(['/admin/especialidades']);
+        }),
+        catchError(error => {
+          console.error('Error al crear la especialidad:', error);
+          
+          let errorMessage = 'Error al crear la especialidad';
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.status === 409) {
+            errorMessage = 'Ya existe una especialidad con ese código';
+          }
+          
+          this.toastr.error(errorMessage, 'Error');
+          this.isSubmitting = false;
+          return of(null);
+        })
+      ).subscribe();
     } else {
-      this.codigoError = 'El código es obligatorio';
+      this.markFormGroupTouched(this.especialidadForm);
     }
   }
 
-  onNombreChange() {
-    if (!this.especialidad.nombre || this.especialidad.nombre.trim() === '') {
-      this.nombreError = 'El nombre es obligatorio';
-    } else {
-      this.nombreError = '';
-    }
+  // Función para marcar todos los campos como tocados
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
-  onSubmit() {
-    this.onNombreChange();
-    this.onCodigoChange();
+  // Método para limpiar el formulario
+  resetForm(): void {
+    this.especialidadForm.reset();
+    Object.keys(this.especialidadForm.controls).forEach(key => {
+      const control = this.especialidadForm.get(key);
+      control?.setErrors(null);
+    });
+  }
 
-    if (this.nombreError || this.codigoError) {
-      return;
-    }
-
-    if (this.isEditing) {
-      this.especialidadService.editarEspecialidad(this.especialidad.idEspecialidad, this.especialidad).subscribe(
-        response => {
-          console.log('Respuesta del servidor:', response);
-          this.router.navigate(['admin/especialidades']);
-        },
-        error => console.error('Error al editar:', error)
-      );
+  // Método para cancelar la creación
+  cancelar(): void {
+    if (this.especialidadForm.dirty) {
+      if (confirm('¿Estás seguro de que quieres cancelar? Los cambios no guardados se perderán.')) {
+        this.router.navigate(['/admin/especialidades']);
+      }
     } else {
-      this.especialidadService.crearEspecialidad(this.especialidad).subscribe(
-        response => {
-          console.log('Respuesta del servidor:', response);
-          this.router.navigate(['admin/especialidades']);
-        },
-        error => console.error('Error al crear:', error)
-      );
+      this.router.navigate(['/admin/especialidades']);
     }
   }
 }
