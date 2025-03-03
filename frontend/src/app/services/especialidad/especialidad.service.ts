@@ -26,7 +26,7 @@ export class EspecialidadService {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<any>(`${this.apiUrl}/BuscarEspecialidad/${id}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/buscarespecialidad/${id}`, { headers });
   }
 
 
@@ -35,7 +35,7 @@ export class EspecialidadService {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
-    return this.http.post<any>(`${this.apiUrl}/CrearEspecialidad`, especialidad, { headers });
+    return this.http.post<any>(`${this.apiUrl}/crearespecialidad`, especialidad, { headers });
   }
 
 
@@ -44,7 +44,7 @@ export class EspecialidadService {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.put<any>(`${this.apiUrl}/ModificarEspecialidad/${id}`, especialidad, { headers });
+    return this.http.put<any>(`${this.apiUrl}/modificarespecialidad/${id}`, especialidad, { headers });
   }
 
 
@@ -53,7 +53,7 @@ export class EspecialidadService {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
-    return this.http.delete<any>(`${this.apiUrl}/BorrarEspecialidad/${id}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/eliminarespecialidad/${id}`, { headers });
   }
 
 

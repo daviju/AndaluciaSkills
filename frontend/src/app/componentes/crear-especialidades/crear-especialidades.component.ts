@@ -5,6 +5,7 @@ import { EspecialidadService } from '../../services/especialidad/especialidad.se
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -15,17 +16,19 @@ interface Especialidad {
 
 @Component({
   selector: 'app-crear-especialidad',
-  templateUrl: '../crear-especialidades/crear-especialidades.component.html',
-  styleUrls: ['../crear-especialidades/crear-especialidades.component.scss'],
+  templateUrl: './crear-especialidades.component.html',
+  styleUrls: ['./crear-especialidades.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
-  ]
+    RouterModule,
+    ToastrModule
+  ],
+  providers: [FormBuilder]
 })
 export class CrearEspecialidadComponent implements OnInit {
-  especialidadForm: FormGroup = this.initForm(); // Inicializamos directamente aquí
+  especialidadForm!: FormGroup;
   isSubmitting: boolean = false;
 
   constructor(
@@ -33,14 +36,16 @@ export class CrearEspecialidadComponent implements OnInit {
     private especialidadService: EspecialidadService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     // Si necesitamos inicializar algo adicional
   }
 
-  private initForm(): FormGroup {
-    return this.fb.group({
+  private initForm(): void {
+    this.especialidadForm = this.fb.group({
       nombre: ['', [
         Validators.required,
         Validators.minLength(3),
@@ -100,6 +105,12 @@ export class CrearEspecialidadComponent implements OnInit {
           let errorMessage = 'Error al crear la especialidad';
           if (error.error?.message) {
             errorMessage = error.error.message;
+          } else if (error.status === 403) {
+            errorMessage = 'No tienes permisos para crear especialidades';
+            // Opcionalmente, redirigir al login si el token ha expirado
+            if (error.error?.message?.includes('token')) {
+              this.router.navigate(['/login']);
+            }
           } else if (error.status === 409) {
             errorMessage = 'Ya existe una especialidad con ese código';
           }
