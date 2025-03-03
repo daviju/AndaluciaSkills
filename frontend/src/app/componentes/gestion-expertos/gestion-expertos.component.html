@@ -1,44 +1,56 @@
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Gestión de Expertos</h2>
-    <div class="d-flex justify-content-end mb-3">
-      <button class="btn btn-primary" routerLink="/admin/crear-experto">Crear Experto</button>
-    </div>
-    <div class="table-responsive">
-      <table class="table custom-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>DNI</th>
-            <th>Especialidad</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let experto of expertos">
-            <td>{{ experto.idUser }}</td>
-            <td>{{ experto.username }}</td>
-            <td>{{ experto.nombre }}</td>
-            <td>{{ experto.apellidos }}</td>
-            <td>{{ experto.dni }}</td>
-            <td>{{ experto.nombreEspecialidad }}</td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-info btn-sm me-2" (click)="verExperto(experto.idUser)">
-                  <i class="fas fa-eye"></i> Ver
+<div class="page-container">
+    <div class="content-card">
+      <div class="content-header">
+        <h2>Gestión de Expertos</h2>
+        <p>Administra los expertos de AndaluciaSkills</p>
+      </div>
+  
+      <div class="actions-bar">
+        <button class="btn-primary" routerLink="/admin/crear-experto">
+          <i class="fas fa-plus"></i> Nuevo Experto
+        </button>
+      </div>
+  
+      <div class="table-container" *ngIf="expertos.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              <th>DNI</th>
+              <th>Especialidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let experto of expertos">
+              <td>{{ experto.idUser }}</td>
+              <td>{{ experto.username }}</td>
+              <td>{{ experto.nombre }}</td>
+              <td>{{ experto.apellidos }}</td>
+              <td>{{ experto.dni }}</td>
+              <td>{{ experto.nombreEspecialidad }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon btn-info" (click)="verExperto(experto.idUser)" title="Ver detalles">
+                  <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn btn-warning btn-sm me-2" (click)="editarExperto(experto.idUser)">
-                  <i class="fas fa-edit"></i> Editar
+                <button class="btn-icon btn-warning" (click)="editarExperto(experto.idUser)" title="Editar">
+                  <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-danger btn-sm" (click)="borrarExperto(experto.idUser)">
-                  <i class="fas fa-trash"></i> Borrar
+                <button class="btn-icon btn-danger" (click)="borrarExperto(experto.idUser)" title="Eliminar">
+                  <i class="fas fa-trash"></i>
                 </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div *ngIf="expertos.length === 0" class="empty-state">
+        <i class="fas fa-users-slash"></i>
+        <p>No hay expertos registrados</p>
+      </div>
     </div>
   </div>

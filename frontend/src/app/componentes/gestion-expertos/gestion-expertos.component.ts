@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-gestionar-expertos',
   templateUrl: '../gestion-expertos/gestion-expertos.component.html',
-  styleUrls: ['../gestion-expertos/gestion-expertos.component.css'],
+  styleUrls: ['../gestion-expertos/gestion-expertos.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule]
 })

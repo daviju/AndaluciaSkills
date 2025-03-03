@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrearEspecialidadesComponent } from './crear-especialidades.component';
+import { CrearEspecialidadesComponent } from '../crear-especialidades/crear-especialidades.component';
 
-describe('CrearEspecialidadesComponent', () => {
+describe('CrearEspecialidadComponent', () => {
   let component: CrearEspecialidadesComponent;
   let fixture: ComponentFixture<CrearEspecialidadesComponent>;
 

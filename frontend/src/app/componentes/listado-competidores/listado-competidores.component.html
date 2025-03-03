@@ -1,31 +1,36 @@
-<div class="competidores-container animate__animated animate__fadeIn">
-    <div class="container py-5">
-      <h2 class="text-center mb-4">Participantes</h2>
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="table-responsive">
-            <table class="table custom-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Apellidos</th>
-                  <th>Centro</th>
-                  <th>Especialidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let competidor of competidores">
-                  <td>{{ competidor.idParticipante }}</td>
-                  <td>{{ competidor.nombre }}</td>
-                  <td>{{ competidor.apellidos }}</td>
-                  <td>{{ competidor.centro }}</td>
-                  <td>{{ competidor.nombreEspecialidad }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+<div class="page-container">
+  <div class="content-card">
+    <div class="content-header">
+      <h2>Listado de Competidores</h2>
+      <p>Competidores registrados en AndaluciaSkills</p>
+    </div>
+
+    <div class="table-container" *ngIf="competidores.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Centro</th>
+            <th>Especialidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let competidor of competidores">
+            <td>{{ competidor.idParticipante }}</td>
+            <td>{{ competidor.nombre }}</td>
+            <td>{{ competidor.apellidos }}</td>
+            <td>{{ competidor.centro }}</td>
+            <td>{{ competidor.nombreEspecialidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="competidores.length === 0" class="empty-state">
+      <i class="fas fa-users"></i>
+      <p>No hay competidores registrados</p>
     </div>
   </div>
+</div>

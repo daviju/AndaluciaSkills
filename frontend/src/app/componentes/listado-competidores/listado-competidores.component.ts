@@ -9,7 +9,7 @@ import { ParticipantesService } from '../../services/participantes/participantes
     CommonModule,
   ],
   templateUrl: './listado-competidores.component.html',
-  styleUrls: ['./listado-competidores.component.css']
+  styleUrls: ['./listado-competidores.component.scss']
 })
 export class ListaCompetidoresComponent implements OnInit {
   competidores: any[] = [];
