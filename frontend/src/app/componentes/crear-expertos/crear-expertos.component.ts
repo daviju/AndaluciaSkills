@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-crear-experto',
   templateUrl: '../../componentes/crear-expertos/crear-expertos.component.html',
-  styleUrls: ['./crear-expertos.component.scss'],
+  styleUrls: ['./crear-expertos.component.scss'], 
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
@@ -25,7 +25,6 @@ export class CrearExpertoComponent implements OnInit {
   especialidades: any[] = [];
   isEditing = false;
   dniError: string = '';
-  isSubmitting = false;
 
   constructor(
     private expertoService: ExpertoService,
@@ -39,92 +38,69 @@ export class CrearExpertoComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEditing = true;
-      this.expertoService.getExperto(id).subscribe({
-        next: (data) => {
+      this.expertoService.getExperto(id).subscribe(
+        data => {
           this.experto = {
             ...data,
             especialidad_id_especialidad: data.especialidad?.idEspecialidad
           };
-        },
-        error: (error) => {
-          console.error('Error al cargar experto:', error);
-          alert('Error al cargar los datos del experto');
         }
-      });
+      );
     }
   }
 
   cargarEspecialidades() {
-    this.especialidadService.getEspecialidades().subscribe({
-      next: (data) => {
+    this.especialidadService.getEspecialidades().subscribe(
+      data => {
         this.especialidades = data;
       },
-      error: (error) => {
-        console.error('Error al cargar especialidades:', error);
-        alert('Error al cargar las especialidades');
-      }
-    });
+      error => console.error('Error al cargar especialidades:', error)
+    );
   }
 
   onSubmit() {
     if (!this.validarFormulario()) {
-      console.error('Formulario inválido');
-      return;
+        console.error('Formulario inválido');
+        return;
     }
 
-    if (this.isSubmitting) {
-      return;
-    }
-
-    this.isSubmitting = true;
-
+    // Asegurarse de que los datos estén limpios
     const expertoData = {
-      idUser: this.experto.idUser,
-      username: this.experto.username.trim(),
-      nombre: this.experto.nombre.trim(),
-      apellidos: this.experto.apellidos.trim(),
-      dni: this.experto.dni.trim(),
-      role: 'ROLE_EXPERTO',
-      especialidad: {
-        idEspecialidad: Number(this.experto.especialidad_id_especialidad)
-      }
+        ...this.experto,
+        username: this.experto.username.trim(),
+        password: this.experto.password.trim(),
+        nombre: this.experto.nombre.trim(),
+        apellidos: this.experto.apellidos.trim(),
+        dni: this.experto.dni.trim(),
+        role: 'ROLE_EXPERTO',
+        especialidad_id_especialidad: Number(this.experto.especialidad_id_especialidad)
     };
-
-    if (this.experto.password && this.experto.password.trim() !== '') {
-      expertoData['password'] = this.experto.password.trim();
-    }
 
     console.log('Datos del experto antes de enviar:', expertoData);
 
-    const operation = this.isEditing
-      ? this.expertoService.editarExperto(this.experto.idUser, expertoData)
-      : this.expertoService.crearExperto(expertoData);
-
-    operation.subscribe({
-      next: (response) => {
-        console.log(`Experto ${this.isEditing ? 'editado' : 'creado'} correctamente:`, response);
-        this.router.navigate(['/admin/expertos']);
-      },
-      error: (error) => {
-        console.error('Error completo:', error);
-        let errorMessage = `Error al ${this.isEditing ? 'editar' : 'crear'} el experto`;
-        
-        if (error.status === 403) {
-          const authData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
-          console.log('Datos de autenticación:', authData);
-          errorMessage = 'No tienes permisos para realizar esta acción';
-        } else if (error.error?.message) {
-          errorMessage = error.error.message;
-        }
-        
-        alert(errorMessage);
-        this.isSubmitting = false;
-      },
-      complete: () => {
-        this.isSubmitting = false;
-      }
-    });
-  }
+    if (this.isEditing) {
+        this.expertoService.editarExperto(this.experto.idUser, expertoData).subscribe({
+            next: (response) => {
+                console.log('Experto editado correctamente:', response);
+                this.router.navigate(['admin/expertos']);
+            },
+            error: (error) => {
+                console.error('Error al editar experto:', error);
+            }
+        });
+    } else {
+        this.expertoService.crearExperto(expertoData).subscribe({
+            next: (response) => {
+                console.log('Experto creado correctamente:', response);
+                this.router.navigate(['admin/expertos']);
+            },
+            error: (error) => {
+                console.error('Error al crear experto:', error);
+                // Aquí podrías añadir manejo de errores específicos
+            }
+        });
+    }
+}
 
   validarDNI(dni: string): { isValid: boolean, message: string } {
     const letrasValidas = "TRWAGMYFPDXBNJZSQVHLCKE";
@@ -178,21 +154,10 @@ export class CrearExpertoComponent implements OnInit {
         !this.experto.dni || 
         !this.experto.especialidad_id_especialidad) {
       console.error('Todos los campos son obligatorios');
-      alert('Todos los campos son obligatorios');
       return false;
     }
 
-    const validacionDNI = this.validarDNI(this.experto.dni);
-    if (!validacionDNI.isValid) {
-      this.dniError = validacionDNI.message;
-      alert(validacionDNI.message);
-      return false;
-    }
-
-    return true;
-  }
-
-  cancelar() {
-    this.router.navigate(['/admin/expertos']);
+    // Validar DNI
+    return this.validarDNI(this.experto.dni).isValid;
   }
 }

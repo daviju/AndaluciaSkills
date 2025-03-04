@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import * as bcrypt from 'bcryptjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,87 +13,50 @@ export class ExpertoService {
   constructor(private http: HttpClient) {}
 
   getExpertos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/buscarexpertos`, {
+    return this.http.get<any[]>(`${this.apiUrl}/BuscarExpertos`, {
       headers: this.getAuthHeaders()
     });
   }
 
   getExperto(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/buscarexperto/${id}`, {
+    return this.http.get<any>(`${this.apiUrl}/BuscarExperto/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   crearExperto(experto: any): Observable<any> {
+    // Crear una copia limpia del objeto experto con solo los campos necesarios
     const expertoToSend = {
-      username: experto.username.trim(),
-      password: experto.password.trim(),
-      nombre: experto.nombre.trim(),
-      apellidos: experto.apellidos.trim(),
-      dni: experto.dni.trim(),
-      role: 'ROLE_EXPERTO',
-      especialidad: {
-        idEspecialidad: Number(experto.especialidad_id_especialidad)
-      }
+        username: experto.username.trim(),
+        password: experto.password.trim(), // Aseguramos que la contraseña está en texto plano
+        nombre: experto.nombre.trim(),
+        apellidos: experto.apellidos.trim(),
+        dni: experto.dni.trim(),
+        role: 'ROLE_EXPERTO',
+        especialidad_id_especialidad: Number(experto.especialidad_id_especialidad)
     };
     
     const headers = this.getAuthHeaders();
     console.log('Datos a enviar al backend:', expertoToSend);
     
-    return this.http.post<any>(`${this.apiUrl}/crearexperto`, expertoToSend, { headers }).pipe(
-      tap({
-        next: (response) => console.log('Respuesta exitosa:', response),
-        error: (error) => console.error('Error en la petición:', error)
-      })
-    );
+    return this.http.post<any>(`${this.apiUrl}/CrearExperto`, expertoToSend, { headers });
   }
 
   editarExperto(id: number, experto: any): Observable<any> {
-    // Crear objeto con la estructura correcta que espera el backend
-    const expertoToSend = {
-      idUser: id,
-      username: experto.username.trim(),
-      nombre: experto.nombre.trim(),
-      apellidos: experto.apellidos.trim(),
-      dni: experto.dni.trim(),
-      role: 'ROLE_EXPERTO',
-      especialidad: {
-        idEspecialidad: Number(experto.especialidad_id_especialidad)
-      }
-    };
-
-    // Mantener la contraseña solo si se proporcionó una nueva
-    if (experto.password && experto.password.trim() !== '') {
-      expertoToSend['password'] = experto.password.trim();
+    // Asegurarse de que el ID de especialidad sea un número
+    if (experto.especialidad_idEspecialidad) {
+      experto.especialidad_idEspecialidad = Number(experto.especialidad_idEspecialidad);
     }
 
     const headers = this.getAuthHeaders();
-    
-    // Debug
-    console.log('Token:', headers.get('Authorization'));
-    console.log('Datos a enviar:', expertoToSend);
-
-    return this.http.put<any>(
-      `${this.apiUrl}/modificarexperto/${id}`,
-      expertoToSend,
-      { headers }
-    ).pipe(
-      tap({
-        next: (response) => console.log('Respuesta exitosa:', response),
-        error: (error) => console.error('Error en la petición:', error)
-      })
-    );
+    console.log('Datos a enviar:', experto); // Para depuración
+    return this.http.put<any>(`${this.apiUrl}/ModificarExperto/${id}`, experto, { headers });
   }
 
   borrarExperto(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/borrarexperto/${id}`, {
+    return this.http.delete<any>(`${this.apiUrl}/BorrarExperto/${id}`, {
       headers: this.getAuthHeaders()
-    }).pipe(
-      tap({
-        next: (response) => console.log('Experto eliminado correctamente'),
-        error: (error) => console.error('Error al eliminar experto:', error)
-      })
-    );
+    });
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -104,6 +68,7 @@ export class ExpertoService {
     }
 
     try {
+      // Debug del token
       const tokenParts = authData.token.split('.');
       if (tokenParts.length === 3) {
         const payload = JSON.parse(atob(tokenParts[1]));
