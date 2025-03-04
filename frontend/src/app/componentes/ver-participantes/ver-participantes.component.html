@@ -1,60 +1,65 @@
-<div class="container mt-4">
-    <div class="card custom-card">
-        <div class="card-header bg-primary text-white">
-            <h2 class="mb-0">Detalles del Participante</h2>
+<div class="participant-container">
+    <!-- Loading State -->
+    <div class="participant-card" *ngIf="loading">
+        <div class="participant-header">
+            <h2>Cargando Participante</h2>
+            <p>Por favor espere...</p>
         </div>
-        
-        <ng-container *ngIf="!loading; else loadingTemplate">
-            <ng-container *ngIf="!error; else errorTemplate">
-                <div class="card-body" *ngIf="participante">
-                    <div class="row mb-3">
-                        <div class="col-md-3"><strong>ID:</strong></div>
-                        <div class="col-md-9">{{ participante.idParticipante }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3"><strong>Nombre:</strong></div>
-                        <div class="col-md-9">{{ participante.nombre }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3"><strong>Apellidos:</strong></div>
-                        <div class="col-md-9">{{ participante.apellidos }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3"><strong>Centro:</strong></div>
-                        <div class="col-md-9">{{ participante.centro }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3"><strong>Especialidad:</strong></div>
-                        <div class="col-md-9">{{ participante.nombreEspecialidad }}</div>
-                    </div>
-                </div>
-            </ng-container>
-        </ng-container>
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+    </div>
 
-        <ng-template #loadingTemplate>
-            <div class="card-body text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-            </div>
-        </ng-template>
-
-        <ng-template #errorTemplate>
-            <div class="card-body">
-                <div class="alert alert-danger">
-                    {{ error }}
-                </div>
-            </div>
-        </ng-template>
-
-        <div class="card-footer d-flex justify-content-between">
-            <button class="btn btn-secondary" routerLink="/participantes">
-                <i class="fas fa-arrow-left"></i> Volver
+    <!-- Error State -->
+    <div class="participant-card" *ngIf="error && !loading">
+        <div class="participant-header">
+            <h2>Error</h2>
+            <p>{{ error }}</p>
+        </div>
+        <div class="buttons-container">
+            <button class="btn-back" routerLink="/participantes">
+                <span>Volver</span>
             </button>
-            <button class="btn btn-primary" 
-                    *ngIf="participante"
-                    [routerLink]="['/editar-participante', participante.idParticipante]">
-                <i class="fas fa-edit"></i> Editar
+        </div>
+    </div>
+
+    <!-- Success State -->
+    <div class="participant-card" *ngIf="participante && !loading && !error">
+        <div class="participant-header">
+            <h2>Detalles del Participante</h2>
+            <p>Información completa del participante</p>
+        </div>
+
+        <div class="participant-info">
+            <div class="info-group">
+                <label>ID</label>
+                <div class="info-value">{{participante.idParticipante}}</div>
+            </div>
+
+            <div class="info-group">
+                <label>Nombre</label>
+                <div class="info-value">{{participante.nombre}}</div>
+            </div>
+
+            <div class="info-group">
+                <label>Apellidos</label>
+                <div class="info-value">{{participante.apellidos}}</div>
+            </div>
+
+            <div class="info-group">
+                <label>Centro</label>
+                <div class="info-value">{{participante.centro}}</div>
+            </div>
+
+            <div class="info-group">
+                <label>Especialidad</label>
+                <div class="info-value">{{participante.nombreEspecialidad}}</div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="btn-back" routerLink="/experto/participantes">
+                <span>Volver</span>
             </button>
         </div>
     </div>

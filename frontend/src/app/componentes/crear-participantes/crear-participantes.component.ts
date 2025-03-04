@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ParticipantesService } from '../../services/participantes/participantes.service';
 import { EspecialidadService } from '../../services/especialidad/especialidad.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-crear-participantes',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './crear-participantes.component.html',
     styleUrls: ['./crear-participantes.component.scss']
 })
@@ -21,6 +22,7 @@ export class CrearParticipantesComponent implements OnInit {
     };
     especialidades: any[] = [];
     isEditing = false;
+    private initialParticipante: any;
 
     constructor(
         private participantesService: ParticipantesService,
@@ -30,23 +32,51 @@ export class CrearParticipantesComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.cargarEspecialidades();
         const id = this.route.snapshot.params['id'];
+        
         if (id) {
             this.isEditing = true;
-            this.participantesService.getParticipante(id).subscribe({
-                next: (data) => {
-                    console.log('Datos recibidos para edición:', data);
+            // Usar forkJoin para cargar especialidades y participante simultáneamente
+            forkJoin({
+                especialidades: this.especialidadService.getEspecialidades(),
+                participante: this.participantesService.getParticipante(id)
+            }).subscribe({
+                next: (result) => {
+                    console.log('Datos cargados:', result);
+                    
+                    // Primero guardamos las especialidades
+                    this.especialidades = result.especialidades;
+                    
+                    // Luego configuramos el participante con su especialidad
                     this.participante = {
-                        ...data,
-                        especialidad_id_especialidad: data.especialidad?.idEspecialidad
+                        ...result.participante,
+                        especialidad_id_especialidad: result.participante.especialidad?.idEspecialidad
                     };
+                    
+                    // Verificar que la especialidad existe en la lista
+                    const especialidadExiste = this.especialidades.some(
+                        esp => esp.idEspecialidad === this.participante.especialidad_id_especialidad
+                    );
+                    
+                    if (!especialidadExiste) {
+                        console.error('La especialidad del participante no se encuentra en la lista');
+                    }
+                    
+                    // Guardar estado inicial
+                    this.initialParticipante = {...this.participante};
+                    
+                    console.log('Participante configurado:', this.participante);
+                    console.log('Especialidad seleccionada:', this.participante.especialidad_id_especialidad);
                 },
                 error: (error) => {
-                    console.error('Error al cargar participante:', error);
-                    this.router.navigate(['/participantes']);
+                    console.error('Error al cargar datos:', error);
+                    this.router.navigate(['/experto/participantes']);
                 }
             });
+        } else {
+            // Si es creación nueva, solo cargamos las especialidades
+            this.cargarEspecialidades();
+            this.initialParticipante = {...this.participante};
         }
     }
 
@@ -60,14 +90,28 @@ export class CrearParticipantesComponent implements OnInit {
         });
     }
 
-    cargarParticipante(id: number) {
-        this.participantesService.getParticipante(id).subscribe({
-            next: (data) => {
-                console.log('Datos del participante recibidos:', data);
-                this.participante = data;
-            },
-            error: (error) => console.error('Error al cargar participante:', error)
-        });
+    // El resto de métodos se mantienen igual...
+
+    cancelar() {
+        if (this.hasUnsavedChanges()) {
+            if (confirm('Hay cambios sin guardar. ¿Estás seguro de que quieres salir?')) {
+                this.router.navigate(['/experto/participantes']).then(() => {
+                    console.log('Navegación completada');
+                }).catch(error => {
+                    console.error('Error en la navegación:', error);
+                });
+            }
+        } else {
+            this.router.navigate(['/experto/participantes']).then(() => {
+                console.log('Navegación completada');
+            }).catch(error => {
+                console.error('Error en la navegación:', error);
+            });
+        }
+    }
+
+    hasUnsavedChanges(): boolean {
+        return JSON.stringify(this.participante) !== JSON.stringify(this.initialParticipante);
     }
 
     onSubmit() {
@@ -88,7 +132,6 @@ export class CrearParticipantesComponent implements OnInit {
                 },
                 error: (error) => {
                     console.error('Error al actualizar:', error);
-                    // Aquí podrías mostrar un mensaje de error al usuario
                 }
             });
         } else {
@@ -99,7 +142,6 @@ export class CrearParticipantesComponent implements OnInit {
                 },
                 error: (error) => {
                     console.error('Error al crear:', error);
-                    // Aquí podrías mostrar un mensaje de error al usuario
                 }
             });
         }

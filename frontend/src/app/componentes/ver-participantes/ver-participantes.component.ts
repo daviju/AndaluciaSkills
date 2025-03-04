@@ -9,7 +9,7 @@ import { tap, map, filter } from 'rxjs/operators';
     standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './ver-participantes.component.html',
-    styleUrls: ['./ver-participantes.component.css']
+    styleUrls: ['./ver-participantes.component.scss']
 })
 export class VerParticipantesComponent implements OnInit {
     participante: any = null;
