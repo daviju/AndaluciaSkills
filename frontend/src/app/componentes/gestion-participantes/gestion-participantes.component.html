@@ -1,44 +1,54 @@
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>Gestión de Participantes</h2>
-      <button class="btn btn-primary" routerLink="/admin/crear-participante">
-        Crear Participante
-      </button>
-    </div>
+<div class="page-container">
+    <div class="content-card">
+      <div class="content-header">
+        <h2>Gestión de Participantes</h2>
+        <p>Administra los participantes de AndaluciaSkills</p>
+      </div>
   
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Centro</th>
-            <th>Especialidad</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let participante of participantes">
-            <td>{{ participante.idParticipante }}</td>
-            <td>{{ participante.nombre }}</td>
-            <td>{{ participante.apellidos }}</td>
-            <td>{{ participante.centro }}</td>
-            <td>{{ participante.nombreEspecialidad }}</td>
-            <td>
-              <button class="btn btn-sm btn-info me-2" (click)="verParticipante(participante.idParticipante)">
-                Ver
-              </button>
-              <button class="btn btn-sm btn-primary me-2" (click)="editarParticipante(participante.idParticipante)">
-                Editar
-              </button>
-              <button class="btn btn-sm btn-danger" (click)="borrarParticipante(participante.idParticipante)">
-                Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="actions-bar">
+        <button class="btn-primary" routerLink="/admin/crear-participante">
+          <i class="fas fa-plus"></i> Nuevo Participante
+        </button>
+      </div>
+  
+      <div class="table-container" *ngIf="participantes.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              <th>Centro</th>
+              <th>Especialidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let participante of participantes">
+              <td>{{ participante.idParticipante }}</td>
+              <td>{{ participante.nombre }}</td>
+              <td>{{ participante.apellidos }}</td>
+              <td>{{ participante.centro }}</td>
+              <td>{{ participante.nombreEspecialidad }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon btn-info" (click)="verParticipante(participante.idParticipante)" title="Ver detalles">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn-icon btn-warning" (click)="editarParticipante(participante.idParticipante)" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-danger" (click)="borrarParticipante(participante.idParticipante)" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div *ngIf="participantes.length === 0" class="empty-state">
+        <i class="fas fa-users-slash"></i>
+        <p>No hay participantes registrados</p>
+      </div>
     </div>
   </div>
-  

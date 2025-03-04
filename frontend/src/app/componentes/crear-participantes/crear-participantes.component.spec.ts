@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CrearParticipantesComponent } from './crear-participantes.component';
+import { ParticipantesService } from '../../services/participantes/participantes.service';
+import { CommonModule } from '@angular/common';
 
 describe('CrearParticipantesComponent', () => {
   let component: CrearParticipantesComponent;
@@ -8,7 +12,17 @@ describe('CrearParticipantesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CrearParticipantesComponent]
+      imports: [
+        CrearParticipantesComponent,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule
+      ],
+      providers: [
+        ParticipantesService
+      ]
     })
     .compileComponents();
 
@@ -19,5 +33,10 @@ describe('CrearParticipantesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  // Aquí puedes agregar más pruebas específicas
+  it('should initialize form', () => {
+    expect(component.participante).toBeDefined();
   });
 });
