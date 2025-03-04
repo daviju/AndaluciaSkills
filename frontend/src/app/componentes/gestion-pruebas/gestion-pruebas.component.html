@@ -1,15 +1,15 @@
-<!-- gestionar-pruebas.component.html -->
-<div class="container mt-4">
-    <div class="card">
-      <div class="card-header">
-        <h2 class="mb-0">Gestionar Pruebas</h2>
+<div class="page-container">
+    <div class="content-card">
+      <div class="content-header">
+        <h2>Gestionar Pruebas</h2>
+        <p>Crea y gestiona las pruebas de evaluación</p>
       </div>
-      
-      <div class="card-body">
+  
+      <div class="card-content">
         <form [formGroup]="pruebaForm" (ngSubmit)="onSubmit()" class="needs-validation">
           <!-- Datos básicos de la prueba -->
-          <div class="row mb-4">
-            <div class="col-md-8 mb-3">
+          <div class="form-section">
+            <div class="form-group">
               <label for="enunciado" class="form-label">Enunciado *</label>
               <input 
                 type="text" 
@@ -22,7 +22,7 @@
               </div>
             </div>
   
-            <div class="col-md-4 mb-3">
+            <div class="form-group">
               <label for="puntuacionMaxima" class="form-label">Puntuación Máxima *</label>
               <input 
                 type="number" 
@@ -37,99 +37,93 @@
           </div>
   
           <!-- Sección de Items -->
-          <div class="card mb-4">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Items de Evaluación</h5>
-              <button type="button" class="btn btn-primary btn-sm" (click)="agregarItem()">
-                <i class="fas fa-plus me-1"></i> Añadir Item
+          <div class="items-section">
+            <div class="section-header">
+              <h3>Items de Evaluación</h3>
+              <button type="button" class="btn-primary" (click)="agregarItem()">
+                <i class="fas fa-plus"></i> Añadir Item
               </button>
             </div>
             
-            <div class="card-body">
-              <div formArrayName="items">
-                <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" 
-                     class="card mb-3 border-light">
-                  <div class="card-body">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label class="form-label">Descripción del Item *</label>
-                        <input 
-                          type="text" 
-                          class="form-control"
-                          formControlName="descripcion"
-                          [class.is-invalid]="isItemInvalid(i, 'descripcion')"
-                          placeholder="Describe el criterio de evaluación">
-                        <div class="invalid-feedback">
-                          La descripción debe tener al menos 5 caracteres
-                        </div>
-                      </div>
-                      
-                      <div class="col-md-3">
-                        <label class="form-label">Peso (%) *</label>
-                        <input 
-                          type="number" 
-                          class="form-control"
-                          formControlName="peso"
-                          [class.is-invalid]="isItemInvalid(i, 'peso')"
-                          placeholder="1-100">
-                        <div class="invalid-feedback">
-                          El peso debe estar entre 1 y 100
-                        </div>
-                        <small class="text-muted">La suma debe ser 100%</small>
-                      </div>
-                      
-                      <div class="col-md-3">
-                        <label class="form-label">Grados de Consecución *</label>
-                        <input 
-                          type="number" 
-                          class="form-control"
-                          formControlName="grados_consecucion"
-                          [class.is-invalid]="isItemInvalid(i, 'gradosConsecucion')"
-                          placeholder="0-100">
-                        <div class="invalid-feedback">
-                          Los grados deben estar entre 0 y 100
-                        </div>
-                      </div>
+            <div formArrayName="items" class="items-container">
+              <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" 
+                   class="item-card">
+                <div class="item-content">
+                  <div class="form-group">
+                    <label class="form-label">Descripción del Item *</label>
+                    <input 
+                      type="text" 
+                      class="form-control"
+                      formControlName="descripcion"
+                      [class.is-invalid]="isItemInvalid(i, 'descripcion')"
+                      placeholder="Describe el criterio de evaluación">
+                    <div class="invalid-feedback">
+                      La descripción debe tener al menos 5 caracteres
                     </div>
-  
-                    <button type="button" class="btn btn-outline-danger btn-sm mt-3" 
-                            (click)="eliminarItem(i)"
-                            [disabled]="items.length === 1">
-                      <i class="fas fa-trash-alt me-1"></i> Eliminar Item
-                    </button>
                   </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Peso (%) *</label>
+                    <input 
+                      type="number" 
+                      class="form-control"
+                      formControlName="peso"
+                      [class.is-invalid]="isItemInvalid(i, 'peso')"
+                      placeholder="1-100">
+                    <div class="invalid-feedback">
+                      El peso debe estar entre 1 y 100
+                    </div>
+                    <small class="text-muted">La suma debe ser 100%</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Grados de Consecución *</label>
+                    <input 
+                      type="number" 
+                      class="form-control"
+                      formControlName="grados_consecucion"
+                      [class.is-invalid]="isItemInvalid(i, 'gradosConsecucion')"
+                      placeholder="0-100">
+                    <div class="invalid-feedback">
+                      Los grados deben estar entre 0 y 100
+                    </div>
+                  </div>
+  
+                  <button type="button" class="btn-danger" 
+                          (click)="eliminarItem(i)"
+                          [disabled]="items.length === 1">
+                    <i class="fas fa-trash-alt"></i> Eliminar Item
+                  </button>
                 </div>
               </div>
             </div>
           </div>
   
-          <!-- Mensajes de error y botón de submit -->
-          <div class="row">
-            <div class="col-12">
-              <div *ngIf="error" class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle me-2"></i>{{error}}
-              </div>
-  
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                [disabled]="loading || formInvalid">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                {{loading ? 'Guardando...' : 'Guardar Prueba'}}
-              </button>
+          <!-- Mensajes y botones -->
+          <div class="form-actions">
+            <div *ngIf="error" class="error-message">
+              <i class="fas fa-exclamation-triangle"></i> {{error}}
             </div>
+  
+            <button 
+              type="submit" 
+              class="btn-primary submit-button"
+              [disabled]="loading || formInvalid">
+              <span *ngIf="loading" class="spinner"></span>
+              {{loading ? 'Guardando...' : 'Guardar Prueba'}}
+            </button>
           </div>
         </form>
   
-        <div *ngIf="pruebaCreada" class="alert alert-success mt-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span><i class="fas fa-check-circle me-2"></i>Prueba creada correctamente</span>
-            <div>
-              <button type="button" class="btn btn-primary me-2" (click)="descargarPlantilla()">
-                <i class="fas fa-download me-1"></i>Descargar PDF
+        <div *ngIf="pruebaCreada" class="success-message">
+          <div class="success-content">
+            <span><i class="fas fa-check-circle"></i> Prueba creada correctamente</span>
+            <div class="success-actions">
+              <button type="button" class="btn-primary" (click)="descargarPlantilla()">
+                <i class="fas fa-download"></i> Descargar PDF
               </button>
-              <button type="button" class="btn btn-secondary" (click)="nuevaPrueba()">
-                <i class="fas fa-plus me-1"></i>Crear otra prueba
+              <button type="button" class="btn-secondary" (click)="nuevaPrueba()">
+                <i class="fas fa-plus"></i> Crear otra prueba
               </button>
             </div>
           </div>

@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './gestion-pruebas.component.html',
-  styleUrls: ['./gestion-pruebas.component.css']
+  styleUrls: ['./gestion-pruebas.component.scss']
 })
 export class GestionarPruebasComponent implements OnInit {
   pruebaForm: FormGroup;
