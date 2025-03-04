@@ -29,7 +29,7 @@ export class ParticipantesService {
 
   getParticipante(id: number): Observable<any> {
     console.log(`Solicitando participante con ID: ${id}`);
-    return this.http.get<any>(`${this.apiUrl}/BuscarParticipante/${id}`, {
+    return this.http.get<any>(`${this.apiUrl}/buscarparticipante/${id}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       tap(data => console.log('Datos recibidos:', data)),
@@ -48,7 +48,7 @@ export class ParticipantesService {
 
     const headers = this.getAuthHeaders();
     console.log('Datos a enviar:', participante); // Para depuración
-    return this.http.post<any>(`${this.apiUrl}/CrearParticipante`, participante, { headers });
+    return this.http.post<any>(`${this.apiUrl}/crearparticipante`, participante, { headers });
   }
 
   editarParticipante(id: number, participante: any): Observable<any> {
@@ -64,7 +64,7 @@ export class ParticipantesService {
     console.log('Datos a enviar en edición:', participanteToUpdate);
 
     return this.http.put<any>(
-      `${this.apiUrl}/ModificarParticipante/${id}`,
+      `${this.apiUrl}/modificarparticipante/${id}`,
       participanteToUpdate,
       { headers: this.getAuthHeaders() }
     ).pipe(
@@ -77,7 +77,7 @@ export class ParticipantesService {
   }
 
   borrarParticipante(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/BorrarParticipante/${id}`, {
+    return this.http.delete<any>(`${this.apiUrl}/eliminarparticipante/${id}`, {
       headers: this.getAuthHeaders()
     });
   }

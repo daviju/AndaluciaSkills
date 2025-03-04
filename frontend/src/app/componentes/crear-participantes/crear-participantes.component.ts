@@ -17,7 +17,7 @@ export class CrearParticipantesComponent implements OnInit {
         nombre: '',
         apellidos: '',
         centro: '',
-        especialidad_idEspecialidad: null
+        especialidad_id_especialidad: null
     };
     especialidades: any[] = [];
     isEditing = false;
@@ -39,7 +39,7 @@ export class CrearParticipantesComponent implements OnInit {
                     console.log('Datos recibidos para edición:', data);
                     this.participante = {
                         ...data,
-                        especialidad_idEspecialidad: data.especialidad?.idEspecialidad
+                        especialidad_id_especialidad: data.especialidad?.idEspecialidad
                     };
                 },
                 error: (error) => {
