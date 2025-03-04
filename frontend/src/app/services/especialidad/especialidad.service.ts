@@ -41,10 +41,21 @@ export class EspecialidadService {
 
   // EDITAR ESPECIALIDAD
   editarEspecialidad(id: number, especialidad: any): Observable<any> {
-    const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    // Falta Content-Type
-    return this.http.put<any>(`${this.apiUrl}/modificarespecialidad/${id}`, especialidad, { headers });
+    const especialidadToSend = {
+      idEspecialidad: id,
+      nombre: especialidad.nombre,
+      codigo: especialidad.codigo
+    };
+
+    const headers = this.getAuthHeaders();
+    console.log('Token:', headers.get('Authorization'));
+    console.log('Datos a enviar:', especialidadToSend);
+
+    return this.http.put<any>(
+      `${this.apiUrl}/modificarespecialidad/${id}`, 
+      especialidadToSend, 
+      { headers }
+    );
   }
 
 
@@ -59,8 +70,25 @@ export class EspecialidadService {
 
   // Helper method to get headers with token
   private getAuthHeaders(): HttpHeaders {
-    const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
+    const authData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
+    const token = authData.token;
     
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    if (!token) {
+      console.error('No se encontró el token');
+      return new HttpHeaders();
+    }
+
+    // Decodificar el token para debug
+    try {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Token payload:', tokenPayload);
+    } catch (e) {
+      console.error('Error decodificando el token:', e);
+    }
+
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
   }
 }

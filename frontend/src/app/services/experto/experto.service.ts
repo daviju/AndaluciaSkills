@@ -60,10 +60,27 @@ export class ExpertoService {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
+    const authData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
+    
+    if (!authData.token) {
+      console.error('No se encontró el token de autenticación');
+      return new HttpHeaders();
+    }
+
+    try {
+      // Debug del token
+      const tokenParts = authData.token.split('.');
+      if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        console.log('Token payload:', payload);
+      }
+    } catch (e) {
+      console.error('Error al decodificar el token:', e);
+    }
+
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${authData.token}`
     });
   }
 }
