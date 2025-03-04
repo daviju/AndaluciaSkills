@@ -61,8 +61,7 @@ public class EspecialidadController {
     })
 
     @GetMapping("/buscarespecialidad/{id}")
-    public ResponseEntity<EspecialidadDTO> getEspecialidadByID(@RequestParam("id") Integer id) {
-
+    public ResponseEntity<EspecialidadDTO> getEspecialidadByID(@PathVariable Integer id) {
         return ResponseEntity.ok(especialidadService.findById(id)
                 .orElseThrow(() -> new EspecialidadNotFoundException()));
     }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EspecialidadService } from '../../services/especialidad/especialidad.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -29,18 +29,40 @@ interface Especialidad {
 export class CrearEspecialidadComponent implements OnInit {
   especialidadForm!: FormGroup;
   isSubmitting: boolean = false;
+  isEditing: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private especialidadService: EspecialidadService,
     private router: Router,
+    private route: ActivatedRoute,
     private toastr: ToastrService
   ) {
     this.initForm();
   }
 
   ngOnInit(): void {
-    // Si necesitamos inicializar algo adicional
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      this.isEditing = true;
+      this.cargarEspecialidad(id);
+    }
+  }
+
+  private cargarEspecialidad(id: number): void {
+    this.especialidadService.getEspecialidad(id).subscribe(
+      (data) => {
+        this.especialidadForm.patchValue({
+          nombre: data.nombre,
+          codigo: data.codigo
+        });
+      },
+      (error) => {
+        console.error('Error al cargar la especialidad:', error);
+        this.toastr.error('Error al cargar la especialidad');
+        this.router.navigate(['/admin/especialidades']);
+      }
+    );
   }
 
   private initForm(): void {
@@ -93,20 +115,29 @@ export class CrearEspecialidadComponent implements OnInit {
       this.isSubmitting = true;
       const especialidad: Especialidad = this.especialidadForm.value;
       
-      this.especialidadService.crearEspecialidad(especialidad).pipe(
+      const operation = this.isEditing 
+        ? this.especialidadService.editarEspecialidad(+this.route.snapshot.params['id'], especialidad)
+        : this.especialidadService.crearEspecialidad(especialidad);
+
+      operation.pipe(
         tap(() => {
-          this.toastr.success('Especialidad creada con éxito', 'Éxito');
-          this.router.navigate(['http://localhost:4200/admin/especialidades']);
+          const message = this.isEditing 
+            ? 'Especialidad actualizada con éxito'
+            : 'Especialidad creada con éxito';
+          this.toastr.success(message, 'Éxito');
+          this.router.navigate(['/admin/especialidades']);
         }),
         catchError(error => {
-          console.error('Error al crear la especialidad:', error);
+          console.error('Error:', error);
           
-          let errorMessage = 'Error al crear la especialidad';
+          let errorMessage = this.isEditing 
+            ? 'Error al actualizar la especialidad'
+            : 'Error al crear la especialidad';
+
           if (error.error?.message) {
             errorMessage = error.error.message;
           } else if (error.status === 403) {
-            errorMessage = 'No tienes permisos para crear especialidades';
-            // Opcionalmente, redirigir al login si el token ha expirado
+            errorMessage = 'No tienes permisos';
             if (error.error?.message?.includes('token')) {
               this.router.navigate(['/login']);
             }

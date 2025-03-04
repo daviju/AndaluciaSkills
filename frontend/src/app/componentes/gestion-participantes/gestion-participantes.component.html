@@ -1,1 +1,44 @@
-<p>gestion-participantes works!</p>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Gestión de Participantes</h2>
+      <button class="btn btn-primary" routerLink="/admin/crear-participante">
+        Crear Participante
+      </button>
+    </div>
+  
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Centro</th>
+            <th>Especialidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participante of participantes">
+            <td>{{ participante.idParticipante }}</td>
+            <td>{{ participante.nombre }}</td>
+            <td>{{ participante.apellidos }}</td>
+            <td>{{ participante.centro }}</td>
+            <td>{{ participante.nombreEspecialidad }}</td>
+            <td>
+              <button class="btn btn-sm btn-info me-2" (click)="verParticipante(participante.idParticipante)">
+                Ver
+              </button>
+              <button class="btn btn-sm btn-primary me-2" (click)="editarParticipante(participante.idParticipante)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="borrarParticipante(participante.idParticipante)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

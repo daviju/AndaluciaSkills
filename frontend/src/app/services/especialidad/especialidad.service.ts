@@ -25,7 +25,7 @@ export class EspecialidadService {
   getEspecialidad(id: number): Observable<any> {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
+    
     return this.http.get<any>(`${this.apiUrl}/buscarespecialidad/${id}`, { headers });
   }
 

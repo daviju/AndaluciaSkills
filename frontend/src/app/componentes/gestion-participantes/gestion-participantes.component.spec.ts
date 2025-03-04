@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GestionParticipantesComponent } from './gestion-participantes.component';
+import { GestionarParticipantesComponent } from '../gestion-participantes/gestion-participantes.component';
 
-describe('GestionParticipantesComponent', () => {
-  let component: GestionParticipantesComponent;
-  let fixture: ComponentFixture<GestionParticipantesComponent>;
+describe('GestionarParticipantesComponent', () => {
+  let component: GestionarParticipantesComponent;
+  let fixture: ComponentFixture<GestionarParticipantesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GestionParticipantesComponent]
+      imports: [GestionarParticipantesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GestionParticipantesComponent);
+    fixture = TestBed.createComponent(GestionarParticipantesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

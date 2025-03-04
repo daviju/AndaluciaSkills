@@ -16,7 +16,7 @@ import { VerEspecialidadComponent } from './componentes/ver-especialidades/ver-e
 import { VisualizarGanadoresComponent } from './componentes/ver-ganadores/ver-ganadores.component';
 
 // PARTICIPANTES
-import { GestionParticipantesComponent } from './componentes/gestion-participantes/gestion-participantes.component';
+import { GestionarParticipantesComponent } from './componentes/gestion-participantes/gestion-participantes.component';
 import { CrearParticipantesComponent } from './componentes/crear-participantes/crear-participantes.component';
 import { VerParticipantesComponent } from './componentes/ver-participantes/ver-participantes.component';
 
@@ -46,7 +46,7 @@ export const routes: Routes = [
     { path: 'editar-experto/:id', component: CrearExpertoComponent },
     { path: 'ganadores', component: VisualizarGanadoresComponent },
     { path: 'ver-especialidad/:id', component: VerEspecialidadComponent },
-    { path: 'participantes', component: GestionParticipantesComponent },
+    { path: 'participantes', component: GestionarParticipantesComponent },
     { path: 'crear-participante', component: CrearParticipantesComponent },
     { path: 'ver-participante/:id', component: VerParticipantesComponent },
     { path: 'editar-participante/:id', component: CrearParticipantesComponent }
@@ -55,7 +55,7 @@ export const routes: Routes = [
   // Rutas de experto
   { path: 'experto', children: [
     { path: 'puntuaciones', component: GestionPuntuacionesComponent },
-    { path: 'participantes', component: GestionParticipantesComponent },
+    { path: 'participantes', component: GestionarParticipantesComponent },
     { path: 'pruebas', component: GestionPruebasComponent },
     { path: 'listar-prueba-puntuacion/:participanteId', component: ListadoPruebasPorPuntuacionComponent},
     { path: 'puntuar-items/:participanteId/:pruebaId', component: PuntuacionItemsComponent }

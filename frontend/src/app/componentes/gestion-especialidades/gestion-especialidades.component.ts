@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { EspecialidadService } from '../../services/especialidad/especialidad.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -18,7 +17,7 @@ interface Especialidad {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule // Aseguramos que RouterModule está importado
   ]
 })
 export class GestionarEspecialidadesComponent implements OnInit {
@@ -43,6 +42,7 @@ export class GestionarEspecialidadesComponent implements OnInit {
         next: (data) => {
           this.especialidades = data;
           this.loading = false;
+          console.log('Especialidades cargadas:', this.especialidades); // Log para debug
         },
         error: (error) => {
           console.error('Error al cargar especialidades:', error);
@@ -59,11 +59,19 @@ export class GestionarEspecialidadesComponent implements OnInit {
   }
 
   verEspecialidad(id: number): void {
-    this.router.navigate([`/admin/ver-especialidad/${id}`]); // Corregida la ruta
+    console.log('Intentando ver especialidad con ID:', id); // Log para debug
+    try {
+      this.router.navigate(['admin/ver-especialidad', id]).then(
+        (success) => console.log('Navegación exitosa:', success),
+        (error) => console.error('Error en la navegación:', error)
+      );
+    } catch (error) {
+      console.error('Error al intentar navegar:', error);
+    }
   }
 
   editarEspecialidad(id: number): void {
-    this.router.navigate(['/admin/editar-especialidad', id]);
+    this.router.navigate(['admin/editar-especialidad', id]);
   }
 
   borrarEspecialidad(id: number): void {
