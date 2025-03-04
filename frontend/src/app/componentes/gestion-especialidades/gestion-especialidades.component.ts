@@ -1,64 +1,91 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { EspecialidadService } from '../../services/especialidad/especialidad.service';
+import { ToastrService } from 'ngx-toastr';
 
-@Injectable({
-  providedIn: 'root'
+interface Especialidad {
+  idEspecialidad: number;
+  nombre: string;
+  codigo: string;
+}
+
+@Component({
+  selector: 'app-gestion-especialidades',
+  templateUrl: './gestion-especialidades.component.html',
+  styleUrls: ['./gestion-especialidades.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule
+  ]
 })
-export class GestionarEspecialidadesComponent  {
-  private apiUrl = '/api/especialidades';
+export class GestionarEspecialidadesComponent implements OnInit {
+  especialidades: Especialidad[] = [];
+  loading: boolean = true;
+  error: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private especialidadService: EspecialidadService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
-  // BUSCAR TODAS LAS ESPECIALIDADES
-  getEspecialidades(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, { headers: this.getAuthHeaders() });
+  ngOnInit(): void {
+    this.cargarEspecialidades();
   }
 
-  // BUSCAR ESPECIALIDAD
-  getEspecialidad(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/buscarespecialidad/${id}`, { headers: this.getAuthHeaders() });
+  cargarEspecialidades(): void {
+    this.loading = true;
+    this.especialidadService.getEspecialidades()
+      .subscribe({
+        next: (data) => {
+          this.especialidades = data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar especialidades:', error);
+          this.error = 'Error al cargar las especialidades';
+          this.loading = false;
+          if (error.status === 403) {
+            this.toastr.error('No tienes permisos para ver las especialidades');
+            this.router.navigate(['/login']);
+          } else {
+            this.toastr.error(this.error);
+          }
+        }
+      });
   }
 
-  // CREAR ESPECIALIDAD
-  crearEspecialidad(especialidad: any): Observable<any> {
-    // Asegurarnos de que los datos estén en el formato correcto
-    const payload = {
-      nombre: especialidad.nombre,
-      codigo: especialidad.codigo
-    };
-    
-    return this.http.post<any>(`${this.apiUrl}/crearespecialidad`, payload, { 
-      headers: this.getAuthHeaders()
-    });
+  verEspecialidad(id: number): void {
+    this.router.navigate(['/admin/ver-especialidad', id]);
   }
 
-  // EDITAR ESPECIALIDAD
-  editarEspecialidad(id: number, especialidad: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/modificarespecialidad/${id}`, especialidad, { 
-      headers: this.getAuthHeaders() 
-    });
+  editarEspecialidad(id: number): void {
+    this.router.navigate(['/admin/editar-especialidad', id]);
   }
 
-  // BORRAR ESPECIALIDAD
-  borrarEspecialidad(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/eliminarespecialidad/${id}`, { 
-      headers: this.getAuthHeaders() 
-    });
-  }
-
-  // Helper method to get headers with token
-  private getAuthHeaders(): HttpHeaders {
-    const authData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
-    const token = authData.token;
-    
-    if (!token) {
-      console.error('No se encontró el token de autenticación');
+  borrarEspecialidad(id: number): void {
+    if (confirm('¿Estás seguro de que quieres eliminar esta especialidad?')) {
+      this.especialidadService.borrarEspecialidad(id)
+        .subscribe({
+          next: () => {
+            this.toastr.success('Especialidad eliminada con éxito');
+            this.cargarEspecialidades();
+          },
+          error: (error) => {
+            console.error('Error al eliminar especialidad:', error);
+            if (error.status === 403) {
+              this.toastr.error('No tienes permisos para eliminar especialidades');
+              this.router.navigate(['/login']);
+            } else if (error.status === 409) {
+              this.toastr.error('No se puede eliminar la especialidad porque está siendo utilizada');
+            } else {
+              this.toastr.error('Error al eliminar la especialidad');
+            }
+          }
+        });
     }
-
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
   }
 }

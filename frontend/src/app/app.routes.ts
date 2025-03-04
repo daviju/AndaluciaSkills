@@ -4,7 +4,7 @@ import { ListaCompetidoresComponent } from './componentes/listado-competidores/l
 
 // EXPERTOS
 import { GestionarExpertosComponent } from './componentes/gestion-expertos/gestion-expertos.component';
-import { CrearExpertosComponent } from './componentes/crear-expertos/crear-expertos.component';
+import { CrearExpertoComponent } from './componentes/crear-expertos/crear-expertos.component';
 import { VerExpertosComponent } from './componentes/ver-expertos/ver-expertos.component';
 
 // ESPECIALIDAD
@@ -41,9 +41,9 @@ export const routes: Routes = [
     { path: 'crear-especialidad', component: CrearEspecialidadComponent },
     { path: 'editar-especialidad/:id', component: CrearEspecialidadComponent },
     { path: 'expertos', component: GestionarExpertosComponent },
-    { path: 'crear-experto', component: CrearExpertosComponent },
+    { path: 'crear-experto', component: CrearExpertoComponent },
     { path: 'ver-experto/:id', component: VerExpertosComponent },
-    { path: 'editar-experto/:id', component: CrearExpertosComponent },
+    { path: 'editar-experto/:id', component: CrearExpertoComponent },
     { path: 'ganadores', component: VerGanadoresComponent },
     { path: 'ver-especialidad/:id', component: VerEspecialidadComponent },
     { path: 'participantes', component: GestionParticipantesComponent },

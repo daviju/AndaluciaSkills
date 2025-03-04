@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrearExpertosComponent } from './crear-expertos.component';
+import { CrearExpertoComponent } from '../crear-expertos/crear-expertos.component';
 
-describe('CrearExpertosComponent', () => {
-  let component: CrearExpertosComponent;
-  let fixture: ComponentFixture<CrearExpertosComponent>;
+describe('CrearExpertoComponent', () => {
+  let component: CrearExpertoComponent;
+  let fixture: ComponentFixture<CrearExpertoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CrearExpertosComponent]
+      imports: [CrearExpertoComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CrearExpertosComponent);
+    fixture = TestBed.createComponent(CrearExpertoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

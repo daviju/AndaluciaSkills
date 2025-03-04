@@ -96,7 +96,7 @@ export class CrearEspecialidadComponent implements OnInit {
       this.especialidadService.crearEspecialidad(especialidad).pipe(
         tap(() => {
           this.toastr.success('Especialidad creada con éxito', 'Éxito');
-          this.router.navigate(['http://localhost:4200/']);
+          this.router.navigate(['http://localhost:4200/admin/especialidades']);
         }),
         catchError(error => {
           console.error('Error al crear la especialidad:', error);
