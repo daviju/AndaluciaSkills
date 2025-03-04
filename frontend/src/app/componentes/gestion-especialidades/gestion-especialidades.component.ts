@@ -59,7 +59,7 @@ export class GestionarEspecialidadesComponent implements OnInit {
   }
 
   verEspecialidad(id: number): void {
-    this.router.navigate(['/admin/ver-especialidad', id]);
+    this.router.navigate([`/admin/ver-especialidad/${id}`]); // Corregida la ruta
   }
 
   editarEspecialidad(id: number): void {
