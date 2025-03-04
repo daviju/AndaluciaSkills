@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VerGanadoresComponent } from './ver-ganadores.component';
+import { VisualizarGanadoresComponent } from '../ver-ganadores/ver-ganadores.component';
 
-describe('VerGanadoresComponent', () => {
-  let component: VerGanadoresComponent;
-  let fixture: ComponentFixture<VerGanadoresComponent>;
+describe('VisualizarGanadoresComponent', () => {
+  let component: VisualizarGanadoresComponent;
+  let fixture: ComponentFixture<VisualizarGanadoresComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VerGanadoresComponent]
+      imports: [VisualizarGanadoresComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(VerGanadoresComponent);
+    fixture = TestBed.createComponent(VisualizarGanadoresComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

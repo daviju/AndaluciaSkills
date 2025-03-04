@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-crear-experto',
   templateUrl: '../../componentes/crear-expertos/crear-expertos.component.html',
+  styleUrls: ['./crear-expertos.component.scss'], 
   standalone: true,
   imports: [CommonModule, FormsModule]
 })

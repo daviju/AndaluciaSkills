@@ -13,7 +13,7 @@ import { CrearEspecialidadComponent } from './componentes/crear-especialidades/c
 import { VerEspecialidadComponent } from './componentes/ver-especialidades/ver-especialidades.component';
 
 // GANADORES
-import { VerGanadoresComponent } from './componentes/ver-ganadores/ver-ganadores.component';
+import { VisualizarGanadoresComponent } from './componentes/ver-ganadores/ver-ganadores.component';
 
 // PARTICIPANTES
 import { GestionParticipantesComponent } from './componentes/gestion-participantes/gestion-participantes.component';
@@ -44,7 +44,7 @@ export const routes: Routes = [
     { path: 'crear-experto', component: CrearExpertoComponent },
     { path: 'ver-experto/:id', component: VerExpertosComponent },
     { path: 'editar-experto/:id', component: CrearExpertoComponent },
-    { path: 'ganadores', component: VerGanadoresComponent },
+    { path: 'ganadores', component: VisualizarGanadoresComponent },
     { path: 'ver-especialidad/:id', component: VerEspecialidadComponent },
     { path: 'participantes', component: GestionParticipantesComponent },
     { path: 'crear-participante', component: CrearParticipantesComponent },
