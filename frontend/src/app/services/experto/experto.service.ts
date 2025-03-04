@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import * as bcrypt from 'bcryptjs';
-
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,29 +26,62 @@ export class ExpertoService {
     // Crear una copia limpia del objeto experto con solo los campos necesarios
     const expertoToSend = {
         username: experto.username.trim(),
-        password: experto.password.trim(), // Aseguramos que la contraseña está en texto plano
+        password: experto.password.trim(),
         nombre: experto.nombre.trim(),
         apellidos: experto.apellidos.trim(),
         dni: experto.dni.trim(),
         role: 'ROLE_EXPERTO',
-        especialidad_id_especialidad: Number(experto.especialidad_id_especialidad)
+        especialidad: {
+          idEspecialidad: Number(experto.especialidad_id_especialidad)
+        }
     };
     
     const headers = this.getAuthHeaders();
-    console.log('Datos a enviar al backend:', expertoToSend);
+    console.log('Datos a enviar al backend (Crear):', expertoToSend);
     
     return this.http.post<any>(`${this.apiUrl}/CrearExperto`, expertoToSend, { headers });
   }
 
   editarExperto(id: number, experto: any): Observable<any> {
-    // Asegurarse de que el ID de especialidad sea un número
-    if (experto.especialidad_idEspecialidad) {
-      experto.especialidad_idEspecialidad = Number(experto.especialidad_idEspecialidad);
+    // Creamos un objeto básico sin password
+    const expertoToSend: any = {
+      idUser: id,
+      username: experto.username.trim(),
+      nombre: experto.nombre.trim(),
+      apellidos: experto.apellidos.trim(),
+      dni: experto.dni.trim(),
+      role: 'ROLE_EXPERTO',
+      especialidad: {
+        idEspecialidad: Number(experto.especialidad_id_especialidad)
+      }
+    };
+
+    // Añadir contraseña solo si se ha proporcionado una nueva
+    if (experto.password && experto.password.trim() !== '') {
+      expertoToSend.password = experto.password.trim();
     }
 
     const headers = this.getAuthHeaders();
-    console.log('Datos a enviar:', experto); // Para depuración
-    return this.http.put<any>(`${this.apiUrl}/ModificarExperto/${id}`, experto, { headers });
+    console.log('Datos a enviar al backend (Modificar):', expertoToSend);
+    console.log('URL:', `${this.apiUrl}/ModificarExperto/${id}`);
+    
+    return this.http.put<any>(
+      `${this.apiUrl}/ModificarExperto/${id}`, 
+      expertoToSend, 
+      { headers }
+    ).pipe(
+      tap({
+        next: (response) => console.log('Respuesta exitosa:', response),
+        error: (error) => {
+          console.error('Error en la petición:', error);
+          console.error('Status:', error.status);
+          console.error('Mensaje:', error.message);
+          if (error.error) {
+            console.error('Error del servidor:', error.error);
+          }
+        }
+      })
+    );
   }
 
   borrarExperto(id: number): Observable<any> {
@@ -67,20 +98,12 @@ export class ExpertoService {
       return new HttpHeaders();
     }
 
-    try {
-      // Debug del token
-      const tokenParts = authData.token.split('.');
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(atob(tokenParts[1]));
-        console.log('Token payload:', payload);
-      }
-    } catch (e) {
-      console.error('Error al decodificar el token:', e);
-    }
+    const token = authData.token;
+    console.log('Token siendo usado:', token);
 
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authData.token}`
+      'Authorization': `Bearer ${token}`
     });
   }
 }
