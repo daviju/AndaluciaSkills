@@ -1,21 +1,31 @@
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Ganadores por Especialidad</h2>
-    <div class="table-responsive">
+<div class="winners-container">
+    <div class="winners-card">
+      <div class="winners-header">
+        <h2>Ganadores por Especialidad</h2>
+        <p>Lista de premiados AndalucíaSkills</p>
+      </div>
+  
+      <div class="table-responsive">
         <table class="table custom-table">
-            <thead>
-                <tr>
-                    <th>Especialidad</th>
-                    <th>Nombre del Ganador</th>
-                    <th>Nota Media</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let ganador of ganadores">
-                    <td>{{ ganador.especialidad }}</td>
-                    <td>{{ ganador.nombreGanador }}</td>
-                    <td>{{ ganador.notaMedia | number:'1.2-2' }}</td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>Especialidad</th>
+              <th>Nombre del Ganador</th>
+              <th>Nota Media</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ganador of ganadores">
+              <td>{{ ganador.especialidad }}</td>
+              <td>{{ ganador.nombreGanador }}</td>
+              <td>{{ ganador.notaMedia | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
         </table>
+      </div>
+  
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
     </div>
-</div>
+  </div>
