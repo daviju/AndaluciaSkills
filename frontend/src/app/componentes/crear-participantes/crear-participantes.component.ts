@@ -10,14 +10,14 @@ import { EspecialidadService } from '../../services/especialidad/especialidad.se
     standalone: true,
     imports: [CommonModule, FormsModule],
     templateUrl: './crear-participantes.component.html',
-    styleUrls: ['./crear-participantes.component.css']
+    styleUrls: ['./crear-participantes.component.scss']
 })
 export class CrearParticipantesComponent implements OnInit {
     participante: any = {
         nombre: '',
         apellidos: '',
         centro: '',
-        especialidad_id_especialidad: null
+        especialidad_idEspecialidad: null
     };
     especialidades: any[] = [];
     isEditing = false;
@@ -39,7 +39,7 @@ export class CrearParticipantesComponent implements OnInit {
                     console.log('Datos recibidos para edición:', data);
                     this.participante = {
                         ...data,
-                        especialidad_id_especialidad: data.especialidad?.idEspecialidad
+                        especialidad_idEspecialidad: data.especialidad?.idEspecialidad
                     };
                 },
                 error: (error) => {

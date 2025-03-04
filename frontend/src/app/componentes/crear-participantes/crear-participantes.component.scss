@@ -1,0 +1,223 @@
+@import 'ngx-toastr/toastr';
+
+.page-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.1;
+    animation: particleMove 20s linear infinite;
+  }
+}
+
+.content-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 40px;
+  width: 95%;
+  margin-top: 60px;
+  max-width: 1200px;
+  max-height: 80vh;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transform: translateY(0);
+  animation: cardFloat 6s ease-in-out infinite;
+  overflow-y: auto;
+}
+
+.content-header {
+  text-align: center;
+  margin-bottom: 35px;
+
+  h2 {
+    background: linear-gradient(45deg, #2c5364, #203a43);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    animation: titlePulse 2s ease-in-out infinite;
+  }
+
+  p {
+    color: #718096;
+    font-size: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards 0.5s;
+  }
+}
+
+.mb-3 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+
+  label {
+    color: #4a5568;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .form-control {
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #2c5364;
+      box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.1);
+    }
+
+    &.is-invalid {
+      border-color: #e53e3e;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+      }
+    }
+
+    &.is-valid {
+      border-color: #38a169;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+      }
+    }
+  }
+
+  .invalid-feedback {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .valid-feedback {
+    color: #38a169;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .form-text {
+    color: #718096;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A5568' d='M3.293 4.293a1 1 0 0 1 1.414 0L6 5.586l1.293-1.293a1 1 0 1 1 1.414 1.414l-2 2a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+}
+
+.d-flex {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, #2c5364, #203a43);
+    color: white;
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 10px 20px rgba(44, 83, 100, 0.2);
+    }
+  }
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes titlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes particleMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100vh); }
+}
+
+@media (max-width: 768px) {
+  .content-card {
+    margin: 10px;
+    padding: 20px;
+    max-height: 90vh;
+  }
+
+  .content-header {
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  .d-flex {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

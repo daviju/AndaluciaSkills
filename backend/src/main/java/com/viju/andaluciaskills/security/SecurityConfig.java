@@ -51,7 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/evaluacionItem/**").hasAnyRole("ADMIN", "EXPERTO")
 
                         // Rutas de administrador (SOLO ROLE_ADMIN)
-                        .requestMatchers("/api/especialidades/**").hasRole("ADMIN")
+                        .requestMatchers("/api/especialidades/**").hasAnyRole("ADMIN", "EXPERTO")
+                        
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/expertos/**").hasRole("ADMIN")
 
