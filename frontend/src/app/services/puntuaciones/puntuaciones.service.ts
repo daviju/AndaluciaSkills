@@ -52,7 +52,7 @@ export class PuntuacionesService {
     }
     
     return this.http.get<any[]>(
-      `${this.apiUrl}/participantes/porEspecialidad/${especialidadId}`,
+      `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
       { headers }
     ).pipe(
       tap(participantes => {
@@ -70,7 +70,7 @@ export class PuntuacionesService {
     console.log('Headers enviados:', headers.get('Authorization'));
     
     return this.http.get<any[]>(
-      `${this.apiUrl}/items/porPrueba/${pruebaId}`,
+      `${this.apiUrl}/items/buscarItemPorPrueba/${pruebaId}`,
       { headers }
     ).pipe(
       tap(items => {

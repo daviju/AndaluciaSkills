@@ -28,7 +28,7 @@ import { GestionarPruebasComponent } from './componentes/gestion-pruebas/gestion
 import { ListadoPruebasPorPuntuacionComponent } from './componentes/listado-pruebas-por-puntuacion/listado-pruebas-por-puntuacion.component';
 
 // PUNTUAR ITEMS
-import { PuntuacionItemsComponent } from './componentes/puntuacion-items/puntuacion-items.component';
+import { PuntuarItemsComponent } from './componentes/puntuacion-items/puntuacion-items.component';
 
 export const routes: Routes = [
   // Rutas públicas
@@ -58,7 +58,7 @@ export const routes: Routes = [
     { path: 'participantes', component: GestionarParticipantesComponent },
     { path: 'pruebas', component: GestionarPruebasComponent },
     { path: 'listar-prueba-puntuacion/:participanteId', component: ListadoPruebasPorPuntuacionComponent},
-    { path: 'puntuar-items/:participanteId/:pruebaId', component: PuntuacionItemsComponent }
+    { path: 'puntuar-items/:participanteId/:pruebaId', component: PuntuarItemsComponent }
   ]},
 
   { path: '**', redirectTo: '' }
