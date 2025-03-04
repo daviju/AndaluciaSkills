@@ -1,38 +1,41 @@
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Puntuar Items de la Prueba</h2>
-  
-    <!-- Mensaje de error -->
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
-    </div>
-  
-    <!-- Mensaje de alerta -->
-    <div *ngIf="mensaje" class="alert alert-{{mensaje.tipo}} alert-dismissible fade show" role="alert">
-      {{mensaje.texto}}
-      <button type="button" class="btn-close" (click)="mensaje = null" aria-label="Close"></button>
-    </div>
-  
-    <!-- Spinner de carga -->
-    <div *ngIf="loading" class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
+<div class="page-container">
+    <div class="content-card">
+      <div class="content-header">
+        <h2>Puntuar Items de la Prueba</h2>
+        <p>Evalúa los ítems según los criterios establecidos</p>
       </div>
-    </div>
   
-    <!-- Formulario de puntuación -->
-    <div *ngIf="!loading && !error && items.length > 0" class="card">
-      <div class="card-body">
+      <!-- Mensaje de error -->
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+  
+      <!-- Mensaje de alerta -->
+      <div *ngIf="mensaje" class="alert alert-{{mensaje.tipo}} alert-dismissible fade show" role="alert">
+        {{mensaje.texto}}
+        <button type="button" class="btn-close" (click)="mensaje = null" aria-label="Close"></button>
+      </div>
+  
+      <!-- Spinner de carga -->
+      <div *ngIf="loading" class="loading-spinner">
+        <div class="spinner"></div>
+        <span class="loading-text">Cargando...</span>
+      </div>
+  
+      <!-- Formulario de puntuación -->
+      <div *ngIf="!loading && !error && items.length > 0" class="form-container">
         <form (ngSubmit)="guardarPuntuaciones()">
-          <div class="mb-3" *ngFor="let item of items">
-              <label [for]="'item_' + item.idItem" class="form-label">
+          <div class="items-grid">
+            <div class="item-card" *ngFor="let item of items">
+              <label [for]="'item_' + item.idItem" class="item-label">
                 {{ item.descripcion }}
-                <small class="text-muted">
-                  (Peso: {{ item.peso }}% - Puntuación máxima: {{ item.peso/10 }})
-                </small>
+                <span class="item-meta">
+                  Peso: {{ item.peso }}% - Máx: {{ item.peso/10 }}
+                </span>
               </label>
               <input 
                 type="number" 
-                class="form-control"
+                class="item-input"
                 [id]="'item_' + item.idItem"
                 [(ngModel)]="valoraciones[item.idItem]"
                 [name]="'valoracion_' + item.idItem"
@@ -41,20 +44,21 @@
                 step="0.1"
                 required
               >
+            </div>
           </div>
   
-          <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary" [disabled]="loading">
+          <div class="form-actions">
+            <button type="submit" class="submit-button" [disabled]="loading">
               Guardar Puntuaciones
             </button>
           </div>
         </form>
       </div>
-    </div>
   
-    <!-- Mensaje cuando no hay items -->
-    <div *ngIf="!loading && !error && items.length === 0" class="alert alert-info">
-      No hay items para puntuar en esta prueba.
+      <!-- Mensaje cuando no hay items -->
+      <div *ngIf="!loading && !error && items.length === 0" class="empty-state">
+        <i class="fas fa-clipboard-list"></i>
+        <p>No hay items para puntuar en esta prueba.</p>
+      </div>
     </div>
   </div>
-  
