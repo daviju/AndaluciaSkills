@@ -17,10 +17,7 @@ export class PruebasService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
-    return new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/pdf'  // Añadimos esto para asegurarnos que aceptamos PDF
-    });
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
 }
 
   // Obtener una prueba por ID
@@ -110,21 +107,13 @@ export class PruebasService {
   }
 
   descargarPlantillaEvaluacion(pruebaId: number): Observable<Blob> {
-    const headers = this.getAuthHeaders();
-    console.log('Token siendo enviado:', headers.get('Authorization')); // Para debug
+    const headers = this.getAuthHeaders()
+        .set('Accept', 'application/pdf');  // Añadimos esto SOLO para la descarga
     
     return this.http.get(`${this.apiUrl}/plantillaevaluacion/${pruebaId}`, {
         responseType: 'blob',
-        headers: headers,
-        observe: 'response'  // Esto nos permitirá ver la respuesta completa
-    }).pipe(
-        map(response => response.body as Blob),
-        catchError(error => {
-            console.error('Headers enviados:', headers);
-            console.error('Error completo:', error);
-            return throwError(() => error);
-        })
-    );
+        headers: headers
+    });
 }
 
 }

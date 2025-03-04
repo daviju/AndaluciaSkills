@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GestionPuntuacionesComponent } from './gestion-puntuaciones.component';
+import { GestionarPuntuacionesComponent } from './gestion-puntuaciones.component';
 
-describe('GestionPuntuacionesComponent', () => {
-  let component: GestionPuntuacionesComponent;
-  let fixture: ComponentFixture<GestionPuntuacionesComponent>;
+describe('GestionarPuntuacionesComponent', () => {
+  let component: GestionarPuntuacionesComponent;
+  let fixture: ComponentFixture<GestionarPuntuacionesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GestionPuntuacionesComponent]
+      imports: [GestionarPuntuacionesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GestionPuntuacionesComponent);
+    fixture = TestBed.createComponent(GestionarPuntuacionesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

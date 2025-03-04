@@ -1,1 +1,52 @@
-<p>gestion-puntuaciones works!</p>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Gestión de Puntuaciones</h2>
+  
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+  
+    <!-- Spinner de carga -->
+    <div *ngIf="loading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  
+    <!-- Tabla de participantes -->
+    <div *ngIf="!loading && !error && participantes.length > 0" class="table-responsive">
+      <table class="table custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Centro</th>
+            <th>Especialidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participante of participantes">
+            <td>{{ participante.idParticipante }}</td>
+            <td>{{ participante.nombre }}</td>
+            <td>{{ participante.apellidos }}</td>
+            <td>{{ participante.centro }}</td>
+            <td>{{ participante.nombreEspecialidad }}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="puntuar(participante.idParticipante)">
+                <i class="fas fa-star me-1"></i>
+                Puntuar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Mensaje cuando no hay participantes -->
+    <div *ngIf="!loading && !error && participantes.length === 0" class="alert alert-info">
+      No hay participantes asignados a su especialidad.
+    </div>
+  </div>
+  

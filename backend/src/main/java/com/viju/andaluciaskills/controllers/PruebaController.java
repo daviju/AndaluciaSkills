@@ -337,7 +337,7 @@ public class PruebaController {
         @ApiResponse(responseCode = "500", description = "Error interno")
     })
 
-    @GetMapping("/plantillaevaluacion/{IdPrueba}")
+    @GetMapping("/plantillaevaluacion/{idPrueba}")
     public ResponseEntity<byte[]> generarPlantillaEvaluacion(@PathVariable Integer idPrueba) {
         
         try {
