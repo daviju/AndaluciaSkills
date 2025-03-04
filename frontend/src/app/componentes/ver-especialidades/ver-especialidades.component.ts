@@ -7,18 +7,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-ver-especialidades',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="container" *ngIf="especialidad">
-      <h2>Detalles de la Especialidad</h2>
-      <div class="card">
-        <div class="card-body">
-          <p class="card-text"><strong>ID:</strong> {{especialidad.idEspecialidad}}</p>
-          <p class="card-text"><strong>Nombre:</strong> {{especialidad.nombre}}</p>
-        </div>
-      </div>
-      <button class="btn btn-primary mt-3" (click)="volver()">Volver</button>
-    </div>
-  `
+  templateUrl: './ver-especialidades.component.html',
+  styleUrls: ['./ver-especialidades.component.scss']
 })
 export class VerEspecialidadComponent implements OnInit {
   especialidad: any;
@@ -34,7 +24,7 @@ export class VerEspecialidadComponent implements OnInit {
     this.especialidadService.getEspecialidad(id).subscribe(
       data => {
         this.especialidad = data;
-        console.log('Datos de la especialidad:', data); // Para depuración
+        console.log('Datos de la especialidad:', data);
       },
       error => {
         console.error('Error:', error);
