@@ -75,6 +75,9 @@ export class GestionarPruebasComponent implements OnInit {
         especialidad_idEspecialidad: this.authService.getEspecialidadFromToken()
     };
 
+    console.log('Token actual:', localStorage.getItem('DATOS_AUTH')); // Debug
+    console.log('Datos a enviar:', pruebaData); // Debug
+
     this.pruebasService.createPrueba(pruebaData).pipe(
         switchMap(pruebaCreada => {
             this.pruebaActual = pruebaCreada; // Guardamos la prueba creada

@@ -59,9 +59,22 @@ export class PruebasService {
 
   // 1. Primero crear la prueba
   createPrueba(prueba: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post(`${this.apiUrl}/crearPrueba`, prueba, { headers });
-  }
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token}`,
+        'Content-Type': 'application/json'
+    });
+
+    console.log('Headers enviados:', headers); // Debug
+    console.log('Token enviado:', headers.get('Authorization')); // Debug
+    console.log('Datos de la prueba:', prueba); // Debug
+
+    return this.http.post(`${this.apiUrl}/crearPrueba`, prueba, { headers }).pipe(
+        catchError(error => {
+            console.error('Error en createPrueba:', error);
+            return throwError(() => error);
+        })
+    );
+}
 
   // 2. Luego crear los items para esa prueba
   createItemsForPrueba(pruebaId: number, items: any[]): Observable<any> {
