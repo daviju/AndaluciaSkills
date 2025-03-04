@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './listado-pruebas-por-puntuacion.component.html',
-  styleUrls: ['./listado-pruebas-por-puntuacion.component.css']
+  styleUrls: ['./listado-pruebas-por-puntuacion.component.scss']
 })
 export class ListarPruebaPuntuacionComponent implements OnInit {
   pruebas: any[] = [];

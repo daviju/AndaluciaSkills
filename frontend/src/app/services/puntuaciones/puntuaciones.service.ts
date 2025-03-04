@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, throwError, from } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { Injectable } from "@angular/core";
-import { catchError, switchMap, tap, concatMap, toArray, mergeMap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 
 export interface DtoEvaluacionItem {
     evaluacion_id_evaluacion: number;
@@ -12,7 +12,7 @@ export interface DtoEvaluacionItem {
 }
 
 export interface DtoEvaluacion {
-    idEvaluacion?: number;  // Cambiado de id_evaluacion a idEvaluacion
+    idEvaluacion?: number;
     prueba_idPrueba: number;
     participante_idParticipante: number;
     user_idUser: number;
@@ -67,7 +67,6 @@ export class PuntuacionesService {
 
   getItemsByPrueba(pruebaId: number): Observable<any[]> {
     const headers = this.getAuthHeaders();
-    console.log('Headers enviados:', headers.get('Authorization'));
     
     return this.http.get<any[]>(
       `${this.apiUrl}/items/buscarItemPorPrueba/${pruebaId}`,
@@ -80,7 +79,6 @@ export class PuntuacionesService {
         console.error('Error al obtener items:', error);
         if (error.status === 403) {
           console.error('Error de autorización. Redirigiendo al login...');
-          // Aquí podrías llamar a authService.cerrarSesion() si es necesario
         }
         return throwError(() => error);
       })
@@ -97,11 +95,11 @@ export class PuntuacionesService {
   guardarEvaluacion(evaluacion: Evaluacion): Observable<any> {
     const headers = this.getAuthHeaders();
     
+    // Primero creamos la evaluación con el formato que espera el backend
     const evaluacionData = {
-        pruebaId: evaluacion.prueba_id_prueba,
-        participanteId: evaluacion.participante_id_participante,
-        userId: evaluacion.user_id_user,
-        notaFinal: 0.0
+        idPrueba: evaluacion.prueba_id_prueba,
+        idParticipante: evaluacion.participante_id_participante,
+        idUser: evaluacion.user_id_user
     };
 
     return this.http.post<DtoEvaluacion>(
@@ -110,6 +108,7 @@ export class PuntuacionesService {
         { headers }
     ).pipe(
         switchMap(evaluacionCreada => {
+            // Adaptamos los items al formato esperado
             const items = evaluacion.evaluacionItems.map(item => ({
                 evaluacion_id_evaluacion: evaluacionCreada.idEvaluacion!,
                 item_id_item: item.item_id_item,
@@ -117,7 +116,7 @@ export class PuntuacionesService {
                 prueba_id_prueba: evaluacion.prueba_id_prueba
             }));
 
-            // Primero guardamos todos los items
+            // Luego guardamos las valoraciones
             return this.http.post<DtoEvaluacionItem[]>(
                 `${this.apiUrl}/pruebas/evaluaciones/${evaluacionCreada.idEvaluacion}/valoraciones`,
                 items,
@@ -139,9 +138,7 @@ export class PuntuacionesService {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken(); // Usar el método del AuthService
-    console.log('Token desde AuthService:', token);
-    
+    const token = this.authService.getToken();
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`

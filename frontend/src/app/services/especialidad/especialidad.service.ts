@@ -43,7 +43,7 @@ export class EspecialidadService {
   editarEspecialidad(id: number, especialidad: any): Observable<any> {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
+    // Falta Content-Type
     return this.http.put<any>(`${this.apiUrl}/modificarespecialidad/${id}`, especialidad, { headers });
   }
 

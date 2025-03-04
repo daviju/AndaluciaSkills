@@ -61,6 +61,9 @@ export class ExpertoService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
   }
 }
