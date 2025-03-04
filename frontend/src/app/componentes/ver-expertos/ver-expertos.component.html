@@ -1,0 +1,34 @@
+<div class="expert-container">
+    <div class="expert-card" *ngIf="experto">
+      <div class="expert-header">
+        <h2>Detalles del Experto</h2>
+        <p>Información completa del experto</p>
+      </div>
+  
+      <div class="expert-info">
+        <div class="info-group">
+          <label>Username</label>
+          <div class="info-value">{{experto.username}}</div>
+        </div>
+  
+        <div class="info-group">
+          <label>Nombre</label>
+          <div class="info-value">{{experto.nombre}}</div>
+        </div>
+  
+        <div class="info-group">
+          <label>DNI</label>
+          <div class="info-value">{{experto.dni}}</div>
+        </div>
+  
+        <div class="info-group">
+          <label>Especialidad</label>
+          <div class="info-value">{{experto.nombreEspecialidad}}</div>
+        </div>
+      </div>
+  
+      <button class="btn-back" (click)="volver()">
+        <span>Volver</span>
+      </button>
+    </div>
+  </div>

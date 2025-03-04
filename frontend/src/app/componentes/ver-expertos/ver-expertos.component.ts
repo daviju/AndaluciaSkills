@@ -7,20 +7,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-ver-experto',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="container" *ngIf="experto">
-      <h2>Detalles del Experto</h2>
-      <div class="card">
-        <div class="card-body">
-          <p class="card-text"><strong>Username:</strong> {{experto.username}}</p>
-          <p class="card-text"><strong>Nombre:</strong> {{experto.nombre}}</p>
-          <p class="card-text"><strong>DNI:</strong> {{experto.dni}}</p>
-          <p class="card-text"><strong>Especialidad:</strong> {{experto.nombreEspecialidad}}</p>
-        </div>
-      </div>
-      <button class="btn btn-primary mt-3" (click)="volver()">Volver</button>
-    </div>
-  `
+  templateUrl: './ver-expertos.component.html',
+  styleUrls: ['./ver-expertos.component.scss']
 })
 export class VerExpertoComponent implements OnInit {
   experto: any;
