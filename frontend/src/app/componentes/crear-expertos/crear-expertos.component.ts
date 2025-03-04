@@ -25,7 +25,6 @@ export class CrearExpertoComponent implements OnInit {
   especialidades: any[] = [];
   isEditing = false;
   dniError: string = '';
-  expertoId: number = 0;
 
   constructor(
     private expertoService: ExpertoService,
@@ -39,20 +38,13 @@ export class CrearExpertoComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEditing = true;
-      this.expertoId = Number(id);
-      console.log('Editando experto con ID:', this.expertoId);
-      
-      this.expertoService.getExperto(this.expertoId).subscribe(
+      this.expertoService.getExperto(id).subscribe(
         data => {
-          console.log('Datos recibidos del experto:', data);
           this.experto = {
             ...data,
-            idUser: data.idUser,
             especialidad_id_especialidad: data.especialidad?.idEspecialidad
           };
-          console.log('Datos preparados para el formulario:', this.experto);
-        },
-        error => console.error('Error al obtener datos del experto:', error)
+        }
       );
     }
   }
@@ -72,11 +64,22 @@ export class CrearExpertoComponent implements OnInit {
         return;
     }
 
-    console.log('Datos del experto antes de enviar:', this.experto);
-    console.log('Estado de edición:', this.isEditing ? 'Editando' : 'Creando');
+    // Asegurarse de que los datos estén limpios
+    const expertoData = {
+        ...this.experto,
+        username: this.experto.username.trim(),
+        password: this.experto.password.trim(),
+        nombre: this.experto.nombre.trim(),
+        apellidos: this.experto.apellidos.trim(),
+        dni: this.experto.dni.trim(),
+        role: 'ROLE_EXPERTO',
+        especialidad_id_especialidad: Number(this.experto.especialidad_id_especialidad)
+    };
+
+    console.log('Datos del experto antes de enviar:', expertoData);
 
     if (this.isEditing) {
-        this.expertoService.editarExperto(this.expertoId, this.experto).subscribe({
+        this.expertoService.editarExperto(this.experto.idUser, expertoData).subscribe({
             next: (response) => {
                 console.log('Experto editado correctamente:', response);
                 this.router.navigate(['admin/expertos']);
@@ -86,17 +89,18 @@ export class CrearExpertoComponent implements OnInit {
             }
         });
     } else {
-        this.expertoService.crearExperto(this.experto).subscribe({
+        this.expertoService.crearExperto(expertoData).subscribe({
             next: (response) => {
                 console.log('Experto creado correctamente:', response);
                 this.router.navigate(['admin/expertos']);
             },
             error: (error) => {
                 console.error('Error al crear experto:', error);
+                // Aquí podrías añadir manejo de errores específicos
             }
         });
     }
-  }
+}
 
   validarDNI(dni: string): { isValid: boolean, message: string } {
     const letrasValidas = "TRWAGMYFPDXBNJZSQVHLCKE";
