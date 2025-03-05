@@ -51,6 +51,8 @@ export class PuntuacionesService {
     }
   
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    console.log('headers = ', headers);
+
     return this.http.get<any[]>(
       `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
       { headers }
