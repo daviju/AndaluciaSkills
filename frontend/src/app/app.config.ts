@@ -24,13 +24,19 @@ export const appConfig: ApplicationConfig = {
         (request: HttpRequest<unknown>, next) => {
           const authService = inject(AuthService);
           const token = authService.getToken();
+
+          console.log('URL de la petición:', request.url);
+          console.log('Token encontrado:', token);
           
           if (token) {
             const authReq = request.clone({
               headers: request.headers.set('Authorization', `Bearer ${token}`)
             });
+
+            console.log('Headers de la petición:', authReq.headers.keys());
             return next(authReq);
           }
+          console.warn('No se encontró token válido o el token no es un string');
           return next(request);
         }
       ])

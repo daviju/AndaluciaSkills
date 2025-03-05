@@ -86,11 +86,13 @@ export class AuthService {
       this.usuario = datos.usuario;
       this.especialidadId = datos.especialidadId;
       this.authStateChanged.next(true); // Notifica a los suscriptores que hay un usuario autenticado
+
       console.log('Datos recuperados:', {
-        token: !!this.token,
+        token: this.token ? `${this.token.substring(0, 20)}...` : null,
         rol: this.rol,
         estaLogueado: this._estaLogueado,
-        usuario: this.usuario
+        usuario: this.usuario,
+        especialidadId: this.especialidadId
       });
     }
   }
@@ -100,7 +102,13 @@ export class AuthService {
    * @param response - Respuesta de autenticación recibida del servidor
    */
   public guardarSesion(response: AuthResponse) {
-    console.log('Respuesta del servidor:', response);
+    if (!response.token) {
+      console.error('Error: No se recibió token del servidor');
+      return;
+    }
+
+    console.log('Token recibido del servidor:', `${response.token.substring(0, 20)}...`);
+
     const datos = {
       token: response.token,
       rol: response.role,
@@ -110,21 +118,33 @@ export class AuthService {
         role: response.role,
         nombre: response.nombre,
         apellidos: response.apellidos,
-        idUser: response.idUser  
+        idUser: response.idUser
       },
       especialidadId: response.especialidadId
     };
-    
+
     // Actualiza el estado interno del servicio
     this.token = response.token;
     this.rol = response.role;
     this._estaLogueado = true;
     this.usuario = datos.usuario;
     this.especialidadId = response.especialidadId;
-    
-    console.log('Guardando datos en localStorage:', datos);
+
+    // Validar token antes de guardar
+    try {
+      const tokenDecoded = jwtDecode(response.token);
+      console.log('Token decodificado:', tokenDecoded);
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+    }
+
+    console.log('Guardando datos en localStorage:', {
+      ...datos,
+      token: `${datos.token.substring(0, 20)}...`
+    });
+
     localStorage.setItem('DATOS_AUTH', JSON.stringify(datos));
-    this.authStateChanged.next(true); // Notifica el cambio de estado de autenticación
+    this.authStateChanged.next(true);
   }
 
   /**
@@ -135,34 +155,35 @@ export class AuthService {
    */
   iniciarSesion(nombreUsuario: string, contraseña: string): Observable<any> {
     const credentials = {
-      username: nombreUsuario.trim(),
-      password: contraseña.trim()
+        username: nombreUsuario.trim(),
+        password: contraseña.trim()
     };
 
+    console.log('Iniciando sesión para usuario:', nombreUsuario);
+
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
-      .pipe(
-        tap(response => {
-          if (response && response.token) {
-            // Si la respuesta contiene un token, guarda los datos de sesión
-            this.token = response.token;
-            this.rol = response.role;
-            this._estaLogueado = true;
-            this.usuario = {
-              username: response.username,
-              role: response.role,
-              nombre: response.nombre,       
-              apellidos: response.apellidos  
-            };
-            this.guardarSesion(response);
-            this.authStateChanged.next(true);
-          }
-        }),
-        catchError(error => {
-          console.error('Error en inicio de sesión:', error);
-          return throwError(() => new Error('Error en el inicio de sesión'));
-        })
-      );
-  }
+        .pipe(
+            tap(response => {
+                if (response && response.token) {
+                    console.log('Respuesta de login exitosa:', {
+                        ...response,
+                        token: `${response.token.substring(0, 20)}...`
+                    });
+                    this.guardarSesion(response);
+                } else {
+                    console.error('La respuesta no contiene token:', response);
+                    throw new Error('Respuesta inválida del servidor');
+                }
+            }),
+            catchError(error => {
+                console.error('Error detallado en inicio de sesión:', error);
+                if (error.status === 401) {
+                    return throwError(() => new Error('Credenciales inválidas'));
+                }
+                return throwError(() => new Error(`Error en el inicio de sesión: ${error.message || 'Error desconocido'}`));
+            })
+        );
+}
 
   /**
    * Cierra la sesión del usuario actual
@@ -174,7 +195,7 @@ export class AuthService {
     this._estaLogueado = false;
     this.usuario = {};
     this.especialidadId = null;
-    
+
     localStorage.removeItem("DATOS_AUTH");
     this.authStateChanged.next(false); // Notifica que ya no hay usuario autenticado
   }
@@ -184,8 +205,12 @@ export class AuthService {
    * @returns HttpHeaders - Cabeceras para solicitudes autenticadas
    */
   getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    console.log('Generando headers con token:', token ? `${token.substring(0, 20)}...` : 'No token');
+
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
   }
 
@@ -213,8 +238,11 @@ export class AuthService {
     const datosAuth = localStorage.getItem('DATOS_AUTH');
     if (datosAuth) {
       const datos = JSON.parse(datosAuth);
-      return datos.token || '';
+      const token = datos.token || '';
+      console.log('Token recuperado:', token ? `${token.substring(0, 20)}...` : 'No token');
+      return token;
     }
+    console.log('No se encontraron datos de autenticación');
     return '';
   }
 
@@ -278,7 +306,7 @@ export class AuthService {
    * Obtiene el nombre completo del usuario desde localStorage
    * @returns {nombre: string, apellidos: string} | null - Objeto con nombre y apellidos o null si no existe
    */
-  getUserFullName(): {nombre: string, apellidos: string} | null {
+  getUserFullName(): { nombre: string, apellidos: string } | null {
     const userData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
     if (userData && userData.nombre && userData.apellidos) {
       return {
