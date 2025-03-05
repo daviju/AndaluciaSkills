@@ -139,6 +139,7 @@ export class PuntuacionesService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();
+    console.log('Token utilizado en la solicitud:', token);
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
