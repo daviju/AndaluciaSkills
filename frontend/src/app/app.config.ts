@@ -24,19 +24,25 @@ export const appConfig: ApplicationConfig = {
         (request: HttpRequest<unknown>, next) => {
           const authService = inject(AuthService);
           const token = authService.getToken();
-
-          console.log('URL de la petición:', request.url);
-          console.log('Token encontrado:', token);
+          
+          console.log('URL original:', request.url);
+          console.log('Token encontrado:', token ? `${token.substring(0, 20)}...` : 'No token');
           
           if (token) {
             const authReq = request.clone({
-              headers: request.headers.set('Authorization', `Bearer ${token}`)
+              headers: request.headers
+                .set('Authorization', `Bearer ${token}`)
+                .set('Content-Type', 'application/json')
+            });
+            
+            console.log('Headers completos:', {
+              Authorization: authReq.headers.get('Authorization'),
+              'Content-Type': authReq.headers.get('Content-Type')
             });
 
-            console.log('Headers de la petición:', authReq.headers.keys());
             return next(authReq);
           }
-          console.warn('No se encontró token válido o el token no es un string');
+          
           return next(request);
         }
       ])

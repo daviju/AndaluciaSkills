@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { Injectable } from "@angular/core";
@@ -50,16 +50,30 @@ export class PuntuacionesService {
       return throwError(() => new Error('No se encontró ID de especialidad'));
     }
 
-    console.log('URL solicitada:', `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`);
+    // Asegúrate de que el token se obtiene correctamente
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('No se encontró el token'));
+    }
+
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+
+    console.log('Headers:', headers);
+    console.log('Especialidad ID:', especialidadId);
 
     return this.http.get<any[]>(
-      `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`
+      `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
+      { headers }
     ).pipe(
-      tap(participantes => {
-        console.log('Participantes recibidos:', participantes);
-      }),
+      tap(response => console.log('Respuesta:', response)),
       catchError(error => {
-        console.error('Error al obtener participantes:', error);
+        console.error('Error detallado:', error);
+        if (error.status === 403) {
+          // Si es un error de autorización, cerrar sesión
+          this.authService.cerrarSesion();
+        }
         return throwError(() => error);
       })
     );

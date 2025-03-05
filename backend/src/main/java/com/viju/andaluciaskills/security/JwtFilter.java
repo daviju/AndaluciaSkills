@@ -90,6 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = extractToken(request);
             if (token != null) {
                 System.out.println("2. Token encontrado en request");
+                System.out.println("Token recibido: " + token.substring(0, Math.min(token.length(), 20)) + "...");
 
                 if (tokenProvider.isValidToken(token)) {
                     String username = tokenProvider.getUsernameFromToken(token);
