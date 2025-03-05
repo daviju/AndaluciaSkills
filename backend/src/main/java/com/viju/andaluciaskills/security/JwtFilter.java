@@ -39,7 +39,10 @@ public class JwtFilter extends OncePerRequestFilter {
     // Lista de rutas públicas que no necesitan autenticación
     private final List<String> publicPaths = Arrays.asList(
         "/api/auth/**",
-        "/api/participantes/**",
+        // Rutas específicas de participantes que deben ser públicas
+        "/api/participantes",
+        "/api/participantes/buscarparticipante/**",
+        // No incluyas /api/participantes/buscarparticipantesespecialidad/** aquí
         "/v3/api-docs/**",
         "/swagger-ui/**",
         "/swagger-ui.html",

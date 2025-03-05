@@ -49,7 +49,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/pruebas/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluaciones/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluacionItem/**").hasAnyRole("ADMIN", "EXPERTO")
-                        .requestMatchers("/api/participantes/buscarparticipantesespecialidad/**").hasAnyRole("EXPERTO", "ADMIN") // Solo expertos y admin pueden acceder
 
                         // Rutas de administrador (SOLO ROLE_ADMIN)
                         .requestMatchers("/api/especialidades/**").hasAnyRole("ADMIN", "EXPERTO")
