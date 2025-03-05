@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import * as bcrypt from 'bcryptjs';
-
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -44,13 +42,32 @@ export class ExpertoService {
 
   editarExperto(id: number, experto: any): Observable<any> {
     // Asegurarse de que el ID de especialidad sea un número
-    if (experto.especialidad_idEspecialidad) {
-      experto.especialidad_idEspecialidad = Number(experto.especialidad_idEspecialidad);
-    }
+    const expertoToSend = {
+      idUser: id,
+      username: experto.username.trim(),
+      nombre: experto.nombre.trim(),
+      apellidos: experto.apellidos.trim(),
+      dni: experto.dni.trim(),
+      role: 'ROLE_EXPERTO',
+      especialidad_id_especialidad: Number(experto.especialidad_id_especialidad)
+    };
+
+    // IMPORTANTE: No incluimos el campo password al editar
 
     const headers = this.getAuthHeaders();
-    console.log('Datos a enviar:', experto); // Para depuración
-    return this.http.put<any>(`${this.apiUrl}/ModificarExperto/${id}`, experto, { headers });
+    console.log('Datos a enviar para edición:', expertoToSend);
+    
+    return this.http.put<any>(`${this.apiUrl}/ModificarExperto/${id}`, expertoToSend, { headers })
+      .pipe(
+        tap({
+          next: (response) => console.log('Respuesta exitosa:', response),
+          error: (error) => {
+            console.error('Error en la petición:', error);
+            console.error('Status:', error.status);
+            console.error('Mensaje de error:', error.message);
+          }
+        })
+      );
   }
 
   borrarExperto(id: number): Observable<any> {
@@ -60,7 +77,16 @@ export class ExpertoService {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const authData = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}');
+    
+    if (!authData.token) {
+      console.error('No se encontró el token de autenticación');
+      return new HttpHeaders();
+    }
+
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authData.token}`
+    });
   }
 }
