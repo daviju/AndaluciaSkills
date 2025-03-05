@@ -18,7 +18,7 @@ export class PruebasService {
   private getAuthHeaders(): HttpHeaders {
     const token = JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token;
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
-}
+  }
 
   // Obtener una prueba por ID
   getPruebaById(id: number): Observable<any> {
@@ -43,7 +43,7 @@ export class PruebasService {
     return this.http.get<any[]>('http://localhost:9000/api/especialidades', { headers });
   }
 
-  createPruebaWithItems(data: {prueba: any, items: any[]}): Observable<any> {
+  createPruebaWithItems(data: { prueba: any, items: any[] }): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.post(`${this.apiUrl}/crearPruebaConItems`, data, { headers })
       .pipe(
@@ -57,8 +57,8 @@ export class PruebasService {
   // 1. Primero crear la prueba
   createPrueba(prueba: any): Observable<any> {
     const headers = new HttpHeaders({
-        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token}`,
-        'Content-Type': 'application/json'
+      'Authorization': `Bearer ${JSON.parse(localStorage.getItem('DATOS_AUTH') || '{}').token}`,
+      'Content-Type': 'application/json'
     });
 
     console.log('Headers enviados:', headers); // Debug
@@ -66,22 +66,22 @@ export class PruebasService {
     console.log('Datos de la prueba:', prueba); // Debug
 
     return this.http.post(`${this.apiUrl}/crearPrueba`, prueba, { headers }).pipe(
-        catchError(error => {
-            console.error('Error en createPrueba:', error);
-            return throwError(() => error);
-        })
+      catchError(error => {
+        console.error('Error en createPrueba:', error);
+        return throwError(() => error);
+      })
     );
-}
+  }
 
   // 2. Luego crear los items para esa prueba
   createItemsForPrueba(pruebaId: number, items: any[]): Observable<any> {
     const headers = this.getAuthHeaders();
-    
+
     const formattedItems = items.map(item => ({
-        descripcion: item.descripcion,
-        peso: item.peso,
-        grados_consecucion: item.grados_consecucion,
-        prueba_id_prueba: pruebaId // Asegúrate de que el nombre coincida exactamente
+      descripcion: item.descripcion,
+      peso: item.peso,
+      grados_consecucion: item.grados_consecucion,
+      prueba_id_prueba: pruebaId // Asegúrate de que el nombre coincida exactamente
     }));
 
     console.log('Items formateados a enviar:', formattedItems);
@@ -94,7 +94,7 @@ export class PruebasService {
       console.error('No se encontró ID de especialidad en el token');
       return throwError(() => new Error('No se encontró ID de especialidad'));
     }
-    
+
     const headers = this.getAuthHeaders();
     return this.http.get<any[]>(`${this.apiUrl}/buscarPruebasPorEspecialidad/${especialidadId}`, { headers })
       .pipe(
@@ -108,12 +108,32 @@ export class PruebasService {
 
   descargarPlantillaEvaluacion(pruebaId: number): Observable<Blob> {
     const headers = this.getAuthHeaders()
-        .set('Accept', 'application/pdf');  // Añadimos esto SOLO para la descarga
-    
+      .set('Accept', 'application/pdf');  // Añadimos esto SOLO para la descarga
+
     return this.http.get(`${this.apiUrl}/plantillaevaluacion/${pruebaId}`, {
-        responseType: 'blob',
-        headers: headers
+      responseType: 'blob',
+      headers: headers
     });
-}
+  }
+
+  getPruebasNoEvaluadasByParticipante(participanteId: number): Observable<any[]> {
+    const especialidadId = this.authService.getEspecialidadFromToken();
+    if (!especialidadId) {
+      console.error('No se encontró ID de especialidad en el token');
+      return throwError(() => new Error('No se encontró ID de especialidad'));
+    }
+    
+    const headers = this.getAuthHeaders();
+    return this.http.get<any[]>(
+      `${this.apiUrl}/buscarPruebasNoEvaluadasPorParticipante/${participanteId}/${especialidadId}`, 
+      { headers }
+    ).pipe(
+      tap(pruebas => console.log('Pruebas no evaluadas obtenidas:', pruebas)),
+      catchError(error => {
+        console.error('Error al obtener pruebas no evaluadas:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 
 }

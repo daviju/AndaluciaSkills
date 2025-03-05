@@ -45,4 +45,5 @@ public class EspecialidadService {
     public void delete(Integer id) {
         especialidadRepository.deleteById(id);
     }
+
 }

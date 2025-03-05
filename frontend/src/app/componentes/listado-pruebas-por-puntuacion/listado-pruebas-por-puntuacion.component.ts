@@ -27,23 +27,30 @@ export class ListarPruebaPuntuacionComponent implements OnInit {
     // Obtener el ID del participante de la URL
     this.route.params.subscribe(params => {
       this.participanteId = +params['participanteId']; // El + convierte el string a número
-      this.cargarPruebas();
+      this.cargarPruebasNoEvaluadas();
     });
   }
 
-  cargarPruebas() {
+  cargarPruebasNoEvaluadas() {
     this.loading = true;
     this.error = null;
 
-    this.pruebasService.getPruebasByEspecialidad().subscribe({
+    if (!this.participanteId) {
+      this.error = 'No se ha proporcionado un ID de participante válido';
+      this.loading = false;
+      return;
+    }
+
+    // Llamamos al método que trae solo las pruebas no evaluadas
+    this.pruebasService.getPruebasNoEvaluadasByParticipante(this.participanteId).subscribe({
       next: (data) => {
-        console.log('Pruebas cargadas:', data);
+        console.log('Pruebas no evaluadas cargadas:', data);
         this.pruebas = data;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar las pruebas:', error);
-        this.error = 'Error al cargar las pruebas de la especialidad';
+        console.error('Error al cargar las pruebas no evaluadas:', error);
+        this.error = 'Error al cargar las pruebas no evaluadas para este participante';
         this.loading = false;
       }
     });

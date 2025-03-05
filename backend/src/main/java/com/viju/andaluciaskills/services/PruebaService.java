@@ -233,6 +233,17 @@ public class PruebaService {
         }
     }
 
+    // OBTENER PRUEBAS NO EVALUADAS POR PARTICIPANTE
+    public List<PruebaDTO> findPruebasNoEvaluadasByParticipante(Integer idParticipante, Integer idEspecialidad) {
+        // Obtenemos todas las pruebas de la especialidad
+        List<PruebaDTO> pruebasEspecialidad = findByEspecialidadId(idEspecialidad);
+        
+        // Filtramos las pruebas que ya han sido evaluadas para este participante
+        return pruebasEspecialidad.stream()
+                .filter(prueba -> !existeEvaluacion(prueba.getIdPrueba(), idParticipante))
+                .collect(Collectors.toList());
+    }
+
 
     // GENERAR PLANTILLA DE EVALUACION
 
