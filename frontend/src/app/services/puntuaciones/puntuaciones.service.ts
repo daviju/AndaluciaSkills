@@ -5,31 +5,31 @@ import { Injectable } from "@angular/core";
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 export interface DtoEvaluacionItem {
-    evaluacion_id_evaluacion: number;
-    item_id_item: number;
-    valoracion: number;
-    prueba_id_prueba: number;
+  evaluacion_id_evaluacion: number;
+  item_id_item: number;
+  valoracion: number;
+  prueba_id_prueba: number;
 }
 
 export interface DtoEvaluacion {
-    idEvaluacion?: number;
-    prueba_idPrueba: number;
-    participante_idParticipante: number;
-    user_idUser: number;
-    notaFinal: number;
+  idEvaluacion?: number;
+  prueba_idPrueba: number;
+  participante_idParticipante: number;
+  user_idUser: number;
+  notaFinal: number;
 }
 
 export interface Evaluacion {
-    prueba_id_prueba: number;
-    participante_id_participante: number;
-    user_id_user: number;
-    evaluacionItems: EvaluacionItem[];
+  prueba_id_prueba: number;
+  participante_id_participante: number;
+  user_id_user: number;
+  evaluacionItems: EvaluacionItem[];
 }
 
 export interface EvaluacionItem {
-    item_id_item: number;
-    valoracion: number;
-    prueba_id_prueba: number;
+  item_id_item: number;
+  valoracion: number;
+  prueba_id_prueba: number;
 }
 
 @Injectable({
@@ -46,11 +46,15 @@ export class PuntuacionesService {
   getParticipantesByEspecialidad(): Observable<any[]> {
     const headers = this.getAuthHeaders();
     const especialidadId = this.authService.getEspecialidadFromToken();
-    
+
     if (!especialidadId) {
       return throwError(() => new Error('No se encontró ID de especialidad'));
     }
-    
+
+    // Log para depuración
+    console.log('Headers enviados:', headers);
+    console.log('URL solicitada:', `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`);
+
     return this.http.get<any[]>(
       `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
       { headers }
@@ -67,7 +71,7 @@ export class PuntuacionesService {
 
   getItemsByPrueba(pruebaId: number): Observable<any[]> {
     const headers = this.getAuthHeaders();
-    
+
     return this.http.get<any[]>(
       `${this.apiUrl}/items/buscarItemPorPrueba/${pruebaId}`,
       { headers }
@@ -94,55 +98,55 @@ export class PuntuacionesService {
 
   guardarEvaluacion(evaluacion: Evaluacion): Observable<any> {
     const headers = this.getAuthHeaders();
-    
+
     // Primero creamos la evaluación con el formato que espera el backend
     const evaluacionData = {
-        idPrueba: evaluacion.prueba_id_prueba,
-        idParticipante: evaluacion.participante_id_participante,
-        idUser: evaluacion.user_id_user
+      idPrueba: evaluacion.prueba_id_prueba,
+      idParticipante: evaluacion.participante_id_participante,
+      idUser: evaluacion.user_id_user
     };
 
     return this.http.post<DtoEvaluacion>(
-        `${this.apiUrl}/pruebas/evaluacion`,
-        evaluacionData,
-        { headers }
+      `${this.apiUrl}/pruebas/evaluacion`,
+      evaluacionData,
+      { headers }
     ).pipe(
-        switchMap(evaluacionCreada => {
-            // Adaptamos los items al formato esperado
-            const items = evaluacion.evaluacionItems.map(item => ({
-                evaluacion_id_evaluacion: evaluacionCreada.idEvaluacion!,
-                item_id_item: item.item_id_item,
-                valoracion: Number(item.valoracion),
-                prueba_id_prueba: evaluacion.prueba_id_prueba
-            }));
+      switchMap(evaluacionCreada => {
+        // Adaptamos los items al formato esperado
+        const items = evaluacion.evaluacionItems.map(item => ({
+          evaluacion_id_evaluacion: evaluacionCreada.idEvaluacion!,
+          item_id_item: item.item_id_item,
+          valoracion: Number(item.valoracion),
+          prueba_id_prueba: evaluacion.prueba_id_prueba
+        }));
 
-            // Luego guardamos las valoraciones
-            return this.http.post<DtoEvaluacionItem[]>(
-                `${this.apiUrl}/pruebas/evaluaciones/${evaluacionCreada.idEvaluacion}/valoraciones`,
-                items,
-                { headers }
-            ).pipe(
-                tap(response => {
-                    console.log('Items guardados y nota final actualizada:', response);
-                })
-            );
-        }),
-        catchError(error => {
-            if (error.status === 409) {
-                return throwError(() => new Error('Este participante ya ha sido evaluado en esta prueba'));
-            }
-            console.error('Error detallado:', error);
-            return throwError(() => new Error(`Error al guardar la evaluación: ${error.message || 'Error desconocido'}`));
-        })
+        // Luego guardamos las valoraciones
+        return this.http.post<DtoEvaluacionItem[]>(
+          `${this.apiUrl}/pruebas/evaluaciones/${evaluacionCreada.idEvaluacion}/valoraciones`,
+          items,
+          { headers }
+        ).pipe(
+          tap(response => {
+            console.log('Items guardados y nota final actualizada:', response);
+          })
+        );
+      }),
+      catchError(error => {
+        if (error.status === 409) {
+          return throwError(() => new Error('Este participante ya ha sido evaluado en esta prueba'));
+        }
+        console.error('Error detallado:', error);
+        return throwError(() => new Error(`Error al guardar la evaluación: ${error.message || 'Error desconocido'}`));
+      })
     );
   }
 
+
   private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    console.log('Token utilizado en la solicitud:', token);
+    const token = this.authService.getToken(); // Obtener token del AuthService
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}` // Añadir token de autorización
     });
   }
 }

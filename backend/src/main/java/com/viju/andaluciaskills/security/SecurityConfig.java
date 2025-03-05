@@ -49,10 +49,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/pruebas/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluaciones/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluacionItem/**").hasAnyRole("ADMIN", "EXPERTO")
+                        .requestMatchers("/api/participantes/buscarparticipantesespecialidad/**").hasAnyRole("EXPERTO", "ADMIN") // Solo expertos y admin pueden acceder
 
                         // Rutas de administrador (SOLO ROLE_ADMIN)
                         .requestMatchers("/api/especialidades/**").hasAnyRole("ADMIN", "EXPERTO")
-                        
+
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/expertos/**").hasRole("ADMIN")
 
@@ -85,20 +86,19 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origen específico de Angular
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList(
-            "Authorization",
-            "Content-Type",
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Headers",
-            "Origin",
-            "Accept",
-            "X-Requested-With",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers"
-        ));
+                "Authorization",
+                "Content-Type",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Headers",
+                "Origin",
+                "Accept",
+                "X-Requested-With",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"));
         config.setExposedHeaders(Arrays.asList("Authorization")); // Exponer el header Authorization
         config.setAllowCredentials(true); // Permite credenciales
         config.setMaxAge(3600L); // Cache CORS preflight por 1 hora
-        
+
         // Crea una fuente de configuración de CORS que se utilizará en la aplicación
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
