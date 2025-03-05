@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { Injectable } from "@angular/core";
@@ -44,20 +44,16 @@ export class PuntuacionesService {
   ) { }
 
   getParticipantesByEspecialidad(): Observable<any[]> {
-    const headers = this.getAuthHeaders();
     const especialidadId = this.authService.getEspecialidadFromToken();
 
     if (!especialidadId) {
       return throwError(() => new Error('No se encontró ID de especialidad'));
     }
 
-    // Log para depuración
-    console.log('Headers enviados:', headers);
     console.log('URL solicitada:', `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`);
 
     return this.http.get<any[]>(
-      `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
-      { headers }
+      `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`
     ).pipe(
       tap(participantes => {
         console.log('Participantes recibidos:', participantes);
@@ -70,11 +66,10 @@ export class PuntuacionesService {
   }
 
   getItemsByPrueba(pruebaId: number): Observable<any[]> {
-    const headers = this.getAuthHeaders();
+    console.log('Solicitando items para prueba:', pruebaId);
 
     return this.http.get<any[]>(
-      `${this.apiUrl}/items/buscarItemPorPrueba/${pruebaId}`,
-      { headers }
+      `${this.apiUrl}/items/buscarItemPorPrueba/${pruebaId}`
     ).pipe(
       tap(items => {
         console.log('Items recibidos:', items);
@@ -90,16 +85,24 @@ export class PuntuacionesService {
   }
 
   verificarEvaluacionExistente(pruebaId: number, participanteId: number): Observable<boolean> {
+    console.log('Verificando evaluación existente:', { pruebaId, participanteId });
+
     return this.http.get<boolean>(
-      `${this.apiUrl}/pruebas/evaluacion/existe/${pruebaId}/${participanteId}`,
-      { headers: this.getAuthHeaders() }
+      `${this.apiUrl}/pruebas/evaluacion/existe/${pruebaId}/${participanteId}`
+    ).pipe(
+      tap(existe => {
+        console.log('Resultado verificación:', existe);
+      }),
+      catchError(error => {
+        console.error('Error al verificar evaluación:', error);
+        return throwError(() => error);
+      })
     );
   }
 
   guardarEvaluacion(evaluacion: Evaluacion): Observable<any> {
-    const headers = this.getAuthHeaders();
+    console.log('Guardando evaluación:', evaluacion);
 
-    // Primero creamos la evaluación con el formato que espera el backend
     const evaluacionData = {
       idPrueba: evaluacion.prueba_id_prueba,
       idParticipante: evaluacion.participante_id_participante,
@@ -108,11 +111,12 @@ export class PuntuacionesService {
 
     return this.http.post<DtoEvaluacion>(
       `${this.apiUrl}/pruebas/evaluacion`,
-      evaluacionData,
-      { headers }
+      evaluacionData
     ).pipe(
+      tap(response => {
+        console.log('Evaluación creada:', response);
+      }),
       switchMap(evaluacionCreada => {
-        // Adaptamos los items al formato esperado
         const items = evaluacion.evaluacionItems.map(item => ({
           evaluacion_id_evaluacion: evaluacionCreada.idEvaluacion!,
           item_id_item: item.item_id_item,
@@ -120,11 +124,11 @@ export class PuntuacionesService {
           prueba_id_prueba: evaluacion.prueba_id_prueba
         }));
 
-        // Luego guardamos las valoraciones
+        console.log('Guardando items de evaluación:', items);
+
         return this.http.post<DtoEvaluacionItem[]>(
           `${this.apiUrl}/pruebas/evaluaciones/${evaluacionCreada.idEvaluacion}/valoraciones`,
-          items,
-          { headers }
+          items
         ).pipe(
           tap(response => {
             console.log('Items guardados y nota final actualizada:', response);
@@ -133,20 +137,12 @@ export class PuntuacionesService {
       }),
       catchError(error => {
         if (error.status === 409) {
+          console.error('Conflicto: Participante ya evaluado');
           return throwError(() => new Error('Este participante ya ha sido evaluado en esta prueba'));
         }
         console.error('Error detallado:', error);
         return throwError(() => new Error(`Error al guardar la evaluación: ${error.message || 'Error desconocido'}`));
       })
     );
-  }
-
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken(); // Obtener token del AuthService
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Añadir token de autorización
-    });
   }
 }
