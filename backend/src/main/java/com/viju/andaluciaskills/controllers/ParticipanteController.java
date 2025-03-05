@@ -153,13 +153,10 @@ public class ParticipanteController {
     @GetMapping("/buscarparticipantesespecialidad/{idEspecialidad}")
     public ResponseEntity<List<ParticipanteDTO>> buscarParticipantesPorEspecialidad(@PathVariable Integer idEspecialidad, HttpServletRequest request) {
         
-        System.out.println("=============================================");
-        System.out.println("Endpoint llamado: /buscarparticipantesespecialidad/" + idEspecialidad);
         System.out.println("Headers de autenticación: " + request.getHeader("Authorization"));
         System.out.println("Usuario autenticado: " + SecurityContextHolder.getContext().getAuthentication().getName());
         System.out.println("Roles: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-        System.out.println("=============================================");
-
+        
         List<ParticipanteDTO> participantes = participanteService.findByEspecialidad(idEspecialidad);
 
         if (participantes.isEmpty()) {

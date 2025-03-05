@@ -45,35 +45,21 @@ export class PuntuacionesService {
 
   getParticipantesByEspecialidad(): Observable<any[]> {
     const especialidadId = this.authService.getEspecialidadFromToken();
-
+  
     if (!especialidadId) {
       return throwError(() => new Error('No se encontró ID de especialidad'));
     }
-
-    // Asegúrate de que el token se obtiene correctamente
-    const token = this.authService.getToken();
-    if (!token) {
-      return throwError(() => new Error('No se encontró el token'));
-    }
-
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${token}`)
-      .set('Content-Type', 'application/json');
-
-    console.log('Headers:', headers);
-    console.log('Especialidad ID:', especialidadId);
-
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<any[]>(
       `${this.apiUrl}/participantes/buscarparticipantesespecialidad/${especialidadId}`,
       { headers }
     ).pipe(
-      tap(response => console.log('Respuesta:', response)),
+      tap(participantes => {
+        console.log('Participantes recibidos:', participantes);
+      }),
       catchError(error => {
-        console.error('Error detallado:', error);
-        if (error.status === 403) {
-          // Si es un error de autorización, cerrar sesión
-          this.authService.cerrarSesion();
-        }
+        console.error('Error al obtener participantes:', error);
         return throwError(() => error);
       })
     );
