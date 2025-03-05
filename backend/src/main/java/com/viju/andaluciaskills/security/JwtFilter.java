@@ -35,28 +35,34 @@ public class JwtFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    
+
     // Lista de rutas públicas que no necesitan autenticación
     private final List<String> publicPaths = Arrays.asList(
-        "/api/auth/**",
-        // Rutas específicas de participantes que deben ser públicas
-        "/api/participantes",
-        "/api/participantes/buscarparticipante/**",
-        // No incluyas /api/participantes/buscarparticipantesespecialidad/** aquí
-        "/v3/api-docs/**",
-        "/swagger-ui/**",
-        "/swagger-ui.html",
-        "/swagger-resources/**",
-        "/webjars/**"
-    );
+            "/api/auth/**",
+            // Rutas específicas de participantes que deben ser públicas
+            "/api/participantes",
+            "/api/participantes/buscarparticipante/**",
+            // No incluyas /api/participantes/buscarparticipantesespecialidad/** aquí
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**");
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        // Verificar si la ruta actual coincide con alguna ruta pública
+
+        // Para las rutas de buscarparticipantesespecialidad debemos procesar el token
+        if (path.contains("/api/participantes/buscarparticipantesespecialidad")) {
+            System.out.println("Ruta protegida detectada, REQUIERE AUTENTICACIÓN: " + path);
+            return false; // No omitir el filtro, procesamos el token
+        }
+
+        // Para las demás rutas, verificar si coinciden con patrones públicos
         boolean isPublicPath = publicPaths.stream()
                 .anyMatch(pattern -> pathMatcher.match(pattern, path));
-        
+
         System.out.println("Checking path: " + path + ", isPublicPath: " + isPublicPath);
         return isPublicPath;
     }
@@ -65,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        
+
         // Si es una ruta pública, permitir el acceso sin token
         if (shouldNotFilter(request)) {
             System.out.println("Ruta pública detectada, permitiendo acceso sin token: " + request.getRequestURI());
@@ -76,9 +82,9 @@ public class JwtFilter extends OncePerRequestFilter {
         System.out.println("1. JwtFilter - Procesando request para: " + request.getRequestURI());
         System.out.println("Method: " + request.getMethod());
         System.out.println("Headers: ");
+
         request.getHeaderNames().asIterator()
-            .forEachRemaining(headerName -> 
-                System.out.println(headerName + ": " + request.getHeader(headerName)));
+                .forEachRemaining(headerName -> System.out.println(headerName + ": " + request.getHeader(headerName)));
 
         try {
             String token = extractToken(request);
@@ -96,6 +102,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     System.out.println("5. Autenticación establecida en SecurityContext");
+
                 } else {
                     System.out.println("ERROR: Token inválido");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -103,6 +110,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             } else {
                 System.out.println("INFO: No se encontró token en la request");
+
                 if (!shouldNotFilter(request)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
@@ -110,6 +118,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             System.out.println("ERROR: Exception durante el procesamiento del token: " + e.getMessage());
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -119,9 +128,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+
         if (StringUtils.hasLength(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
         return null;
     }
 }

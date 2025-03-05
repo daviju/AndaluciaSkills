@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import com.viju.andaluciaskills.services.ParticipanteService;
 import com.viju.andaluciaskills.DTO.ParticipanteDTO;
 import com.viju.andaluciaskills.exceptions.participante.*;
 
+import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +23,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.RequiredArgsConstructor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 @RestController
@@ -146,8 +151,15 @@ public class ParticipanteController {
     })
 
     @GetMapping("/buscarparticipantesespecialidad/{idEspecialidad}")
-    public ResponseEntity<List<ParticipanteDTO>> buscarParticipantesPorEspecialidad(@PathVariable Integer idEspecialidad) {
+    public ResponseEntity<List<ParticipanteDTO>> buscarParticipantesPorEspecialidad(@PathVariable Integer idEspecialidad, HttpServletRequest request) {
         
+        System.out.println("=============================================");
+        System.out.println("Endpoint llamado: /buscarparticipantesespecialidad/" + idEspecialidad);
+        System.out.println("Headers de autenticación: " + request.getHeader("Authorization"));
+        System.out.println("Usuario autenticado: " + SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println("Roles: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        System.out.println("=============================================");
+
         List<ParticipanteDTO> participantes = participanteService.findByEspecialidad(idEspecialidad);
 
         if (participantes.isEmpty()) {

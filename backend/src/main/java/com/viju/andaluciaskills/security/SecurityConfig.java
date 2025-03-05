@@ -41,6 +41,8 @@ public class SecurityConfig {
                         // Rutas públicas (TODOS)
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/participantes/**").permitAll()
+                        .requestMatchers("/api/participantes/buscarparticipante/**").permitAll() 
+
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                                 "/swagger-resources/**", "/webjars/**")
                         .permitAll()
@@ -49,6 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/pruebas/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluaciones/**").hasAnyRole("ADMIN", "EXPERTO")
                         .requestMatchers("/api/evaluacionItem/**").hasAnyRole("ADMIN", "EXPERTO")
+
+                        .requestMatchers("/api/participantes/buscarparticipantesespecialidad/**").hasAnyRole("ADMIN", "EXPERTO")
 
                         // Rutas de administrador (SOLO ROLE_ADMIN)
                         .requestMatchers("/api/especialidades/**").hasAnyRole("ADMIN", "EXPERTO")
