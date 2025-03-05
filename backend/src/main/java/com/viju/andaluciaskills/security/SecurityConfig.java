@@ -40,12 +40,7 @@ public class SecurityConfig {
 
                         // Rutas públicas (TODOS)
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        .requestMatchers("/api/participantes/buscarparticipantesespecialidad/**").hasAnyRole("ADMIN", "EXPERTO")
-
                         .requestMatchers("/api/participantes/**").permitAll()
-                        .requestMatchers("/api/participantes/buscarparticipante/**").permitAll() 
-
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                                 "/swagger-resources/**", "/webjars/**")
                         .permitAll()
