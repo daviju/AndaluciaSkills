@@ -1,40 +1,58 @@
 version: '3.8'
 
 services:
-  mysql:
-    build: ./bd
+  # Servicio de base de datos MariaDB
+  mariadb:
+    image: mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      # Sin contraseña para root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: andaluciaskills
     ports:
-      - "3306:3306"
+      - "3307:3307"  # Mapeo de puerto correcto
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      # Modificado para no requerir contraseña
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  # Servicio de Backend Spring
   backend:
-    build: ./Backend
+    build: ./backend
     ports:
-      - "9000:9000"
+      - "9005:9005"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/andaluciaskills
+      # Corrección de la URL de conexión para MariaDB
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3307/andaluciaskills
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SERVER_PORT: 9000
+      # Sin password
+      SPRING_DATASOURCE_PASSWORD:
+      SERVER_PORT: 9005
     depends_on:
-      mysql:
+      mariadb:
         condition: service_healthy
+    # Red para asegurar comunicación
+    networks:
+      - app-network
 
+  # Servicio de Frontend 
   frontend:
     build: ./frontend
     ports:
-      - "80:80"  # Cambiado de 4200 a 80 porque usamos nginx
+      - "80:80"  # Puerto 80 para Nginx
     depends_on:
       - backend
+    networks:
+      - app-network
 
+# Volumen para persistencia de datos de MariaDB
 volumes:
   mysql_data:
+
+# Red personalizada para los servicios
+networks:
+  app-network:
+    driver: bridge
