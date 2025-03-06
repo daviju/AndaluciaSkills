@@ -30,7 +30,7 @@ FROM nginx:alpine
 
 # Copia los archivos generados en la etapa de build 
 # desde el directorio /app/dist/ al directorio de html de Nginx
-COPY --from=build /app/dist/skills /usr/share/nginx/html/
+COPY --from=build /app/dist/skills/browser /usr/share/nginx/html/
 
 # Documenta que el contenedor escucha en el puerto 80
 EXPOSE 80
