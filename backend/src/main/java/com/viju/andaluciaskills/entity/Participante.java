@@ -10,12 +10,12 @@ import lombok.Data;
 @Table(name = "participantes")
 public class Participante {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID con autoincrement
     @Column(name = "idParticipante")
     private Integer idParticipante;
     
 
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "El nombre es obligatorio") // Verificamos que no sea null, que no este vacio y que al menos tenga un carácter
     @Column(nullable = false)
     private String nombre;
 

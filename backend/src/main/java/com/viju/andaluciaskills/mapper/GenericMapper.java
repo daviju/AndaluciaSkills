@@ -5,6 +5,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+/*
+ * Usamos los MAPPERS para convertir objetos de un tipo a otro, por ejemplo, de una entidad a un DTO y viceversa.
+ 
+ * Así facilitamos la conversión entre objetos
+ * Mejoramos la organización del código
+ * Facilitamos la reutilización de código
+ * No exponemos entidades en los controllers
+ * 
+ * 
+ * (Por lo que he visto hay una Librería que los genera automáticamente -> MapStruct)
+ */
+
 @Component
 public interface GenericMapper<E, D> {
 
@@ -29,6 +41,7 @@ public interface GenericMapper<E, D> {
      */
     default List<D> toDtoList(List<E> entities) {
         if (entities == null) return null;
+        
         return entities.stream()
             .map(this::toDto)
             .collect(Collectors.toList());
@@ -41,6 +54,7 @@ public interface GenericMapper<E, D> {
      */
     default List<E> toEntityList(List<D> dtos) {
         if (dtos == null) return null;
+
         return dtos.stream()
             .map(this::toEntity)
             .collect(Collectors.toList());

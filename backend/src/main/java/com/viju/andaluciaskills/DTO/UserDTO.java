@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 //  Usamos @JsonProperty para mapear nombres de JSON a variables Java.
 
-@Data
+@Data // Genera los getters y setters
 public class UserDTO {
     private Integer idUser;
     private String role;

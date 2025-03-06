@@ -8,9 +8,10 @@ import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component // Anotación para indicar que esta clase es un componente
 public class ParticipanteMapper implements GenericMapper<Participante, ParticipanteDTO> {
 
+    // Enlazamos con EspecialidadRepository porque ParticipanteDTO solo tiene el ID de la especialidad, no el objeto completo
     @Autowired
     private EspecialidadRepository especialidadRepository;
 
@@ -19,6 +20,7 @@ public class ParticipanteMapper implements GenericMapper<Participante, Participa
         if (entity == null) return null;
 
         ParticipanteDTO dto = new ParticipanteDTO();
+
         dto.setIdParticipante(entity.getIdParticipante());
         dto.setNombre(entity.getNombre());
         dto.setApellidos(entity.getApellidos());
@@ -37,6 +39,7 @@ public class ParticipanteMapper implements GenericMapper<Participante, Participa
         if (dto == null) return null;
 
         Participante entity = new Participante();
+        
         entity.setIdParticipante(dto.getIdParticipante());
         entity.setNombre(dto.getNombre());
         entity.setApellidos(dto.getApellidos());

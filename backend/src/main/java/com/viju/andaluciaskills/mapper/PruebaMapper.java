@@ -7,8 +7,8 @@ import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> {
+@Component // Anotación para indicar que esta clase es un componente
+public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> { 
 
     @Autowired
     private EspecialidadRepository especialidadRepository;
@@ -18,6 +18,7 @@ public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> {
         if (entity == null) return null;
 
         PruebaDTO dto = new PruebaDTO();
+        
         dto.setIdPrueba(entity.getIdPrueba());
         dto.setEnunciado(entity.getEnunciado());
         dto.setPuntuacionMaxima(entity.getPuntuacionMaxima());
@@ -34,6 +35,7 @@ public class PruebaMapper implements GenericMapper<Prueba, PruebaDTO> {
         if (dto == null) return null;
 
         Prueba entity = new Prueba();
+        
         entity.setIdPrueba(dto.getIdPrueba());
         entity.setEnunciado(dto.getEnunciado());
         entity.setPuntuacionMaxima(dto.getPuntuacionMaxima());

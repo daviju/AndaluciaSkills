@@ -76,6 +76,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    
     // Configuración de CORS (Cross-Origin Resource Sharing)
     // Este metodo permite el acceso del frontend (Angular)
     @Bean

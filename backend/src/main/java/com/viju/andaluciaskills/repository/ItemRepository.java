@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
+
+    // Encontrar todos los Items que pertenezcan a una prueba
+
     // Consulta todos los Item cuya prueba_id_prueba coincida con un valor dado    
     @Query(value = "SELECT * FROM items WHERE prueba_id_prueba = :pruebaId", nativeQuery = true)
     List<Item> findByPruebaIdPrueba(@Param("pruebaId") Integer pruebaId);

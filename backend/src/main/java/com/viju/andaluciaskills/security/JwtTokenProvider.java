@@ -75,6 +75,7 @@ public class JwtTokenProvider { // Clase que se encarga de generar y validar tok
                 .build()
                 .parseClaimsJws(token); // Si el parsing es exitoso, el token es válido
             return true;
+            
         } catch (JwtException e) {
             // Si ocurre alguna excepción (como firma inválida o expiración), el token no es válido
             return false;

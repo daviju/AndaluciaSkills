@@ -2,7 +2,7 @@ package com.viju.andaluciaskills.DTO;
 
 import lombok.Data;
 
-@Data
+@Data // Genera los getters y setters
 public class ItemDTO {
     private Integer idItem;
     private String descripcion;

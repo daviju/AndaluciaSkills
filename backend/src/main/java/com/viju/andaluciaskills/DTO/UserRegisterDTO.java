@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
-@Data
+@Data // Genera los getters y setters
 public class UserRegisterDTO {
     private String username;
     private String password;
@@ -13,6 +13,6 @@ public class UserRegisterDTO {
     private String dni;
     private String role;
     
-    @JsonProperty("especialidad_id_especialidad")
+    @JsonProperty("especialidad_id_especialidad") //  Usamos @JsonProperty para mapear nombres de JSON a variables Java.
     private Integer especialidad_idEspecialidad;
 }

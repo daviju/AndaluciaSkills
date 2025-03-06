@@ -12,8 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
-@Entity
+@Data // Lombok annotation to generate all the getters, setters, equals, hash, and toString methods
+@Entity // Esta clase esta manejada por JPA
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -21,7 +21,7 @@ public class User implements UserDetails {
     private Integer idUser;
     
 
-    @NotBlank(message = "El rol es obligatorio")
+    @NotBlank(message = "El rol es obligatorio") // Verificamos que no sea null, que no este vacio y que al menos tenga un carácter
     @Column(nullable = false)
     private String role;
 
@@ -47,9 +47,10 @@ public class User implements UserDetails {
 
 
     @NotBlank(message = "El DNI es obligatorio")
-    @Pattern(
-        regexp = "^[0-9]{8}[A-HJ-NP-TV-Z]$",
-        message = "El DNI debe tener 8 números seguidos de una letra válida"
+    // Aseguramos que el campo cumple con un formato especifico antes de guardar
+    @Pattern( 
+        regexp = "^[0-9]{8}[A-HJ-NP-TV-Z]$", // Expresión regular para validar el DNI
+        message = "El DNI debe tener 8 números seguidos de una letra válida" // Mensaje de error si no se cumple la expresión regular
     )
 
 
@@ -68,7 +69,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() { // Devuelve los roles que tiene un usuario
         return List.of(new SimpleGrantedAuthority(role));
     }
 

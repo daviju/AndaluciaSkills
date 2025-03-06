@@ -8,12 +8,12 @@ import lombok.Data;
 @Entity
 public class Prueba {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID con autoincrement
     @Column(name = "id_prueba")
     private Integer idPrueba;
 
 
-    @NotBlank(message = "El enunciado es obligatorio")
+    @NotBlank(message = "El enunciado es obligatorio") // Verificamos que no sea null, que no este vacio y que al menos tenga un carácter
     @Column(name = "enunciado", nullable = false)
     private String enunciado;
 

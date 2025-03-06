@@ -67,7 +67,7 @@ public class AuthController {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
                 
             boolean matches = passwordEncoder.matches(authRequestDTO.getPassword(), user.getPassword());
-            System.out.println("3. ¿Coinciden las contraseñas?: " + matches);
+            System.out.println("¿Coinciden las contraseñas?: " + matches);
             
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword())
@@ -87,8 +87,8 @@ public class AuthController {
             ));
 
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new AuthResponseDTO(null, null, null, null, null, null, null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) // 401 Unauthorized
+                .body(new AuthResponseDTO(null, null, null, null, null, null, null)); // Devuelve un token nulo
         }
     }
 

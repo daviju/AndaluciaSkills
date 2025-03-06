@@ -7,7 +7,7 @@ import com.viju.andaluciaskills.repository.EspecialidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component // Anotación para indicar que esta clase es un componente
 public class UserMapper implements GenericMapper<User, UserDTO> {
 
     @Autowired
@@ -18,6 +18,7 @@ public class UserMapper implements GenericMapper<User, UserDTO> {
         if (entity == null) return null;
 
         UserDTO dto = new UserDTO();
+        
         dto.setIdUser(entity.getIdUser());
         dto.setRole(entity.getRole());
         dto.setUsername(entity.getUsername());
@@ -39,6 +40,7 @@ public class UserMapper implements GenericMapper<User, UserDTO> {
         if (dto == null) return null;
 
         User entity = new User();
+        
         entity.setIdUser(dto.getIdUser());
         entity.setRole(dto.getRole());
         entity.setUsername(dto.getUsername());

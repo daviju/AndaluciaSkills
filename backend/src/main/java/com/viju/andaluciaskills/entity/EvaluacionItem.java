@@ -8,7 +8,7 @@ import lombok.Data;
 @Table(name = "evaluacion_items")
 public class EvaluacionItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID con autoincrement
     @Column(name = "id_evaluacion_item")
     private Integer idEvaluacionItem;
 
