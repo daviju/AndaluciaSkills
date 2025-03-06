@@ -15,11 +15,6 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   # Servicio de Backend Spring
   backend:
@@ -36,8 +31,7 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
       SERVER_PORT: 9005
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     networks:
       - app-network
 
