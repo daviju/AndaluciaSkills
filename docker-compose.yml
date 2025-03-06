@@ -4,16 +4,18 @@ services:
   # Servicio de base de datos MariaDB
   mariadb:
     image: mariadb:latest
+    container_name: mariadb
     environment:
-      # Sin contraseña para root
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: andaluciaskills
+    command: --port=3306  # Puerto estándar dentro del contenedor
     ports:
-      - "3307:3307"  # Mapeo de puerto correcto
+      - "3308:3306"  # Mapea 3308 del host a 3306 del contenedor para evitar conflicto
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
     healthcheck:
-      # Modificado para no requerir contraseña
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 10s
       timeout: 5s
@@ -22,25 +24,27 @@ services:
   # Servicio de Backend Spring
   backend:
     build: ./backend
+    container_name: backend
     ports:
       - "9005:9005"
     environment:
-      # Corrección de la URL de conexión para MariaDB
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3307/andaluciaskills
+      # Usamos mariadb como nombre de host (nombre del servicio)
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/andaluciaskills
       SPRING_DATASOURCE_USERNAME: root
-      # Sin password
       SPRING_DATASOURCE_PASSWORD:
+      # Añadimos configuración de dialecto para mayor seguridad
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
       SERVER_PORT: 9005
     depends_on:
       mariadb:
         condition: service_healthy
-    # Red para asegurar comunicación
     networks:
       - app-network
 
   # Servicio de Frontend 
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
       - "80:80"  # Puerto 80 para Nginx
     depends_on:
@@ -52,7 +56,7 @@ services:
 volumes:
   mysql_data:
 
-# Red personalizada para los servicios
+# Red personalizada para los servicios (explicitamente definida)
 networks:
   app-network:
     driver: bridge

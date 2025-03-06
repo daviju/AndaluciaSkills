@@ -18,8 +18,10 @@ RUN npm install
 COPY . .
 
 # Construye la aplicación y lista el contenido del directorio de distribución
-# El comando 'ls -la' es útil para verificar que los archivos se hayan generado correctamente
-RUN npm run build && ls -la dist/
+RUN npm run build
+
+# Verifica qué directorio se creó con el build (esto es importante)
+RUN ls -la dist/
 
 
 # Segunda etapa: usa Nginx Alpine como imagen base
@@ -28,7 +30,7 @@ FROM nginx:alpine
 
 # Copia los archivos generados en la etapa de build 
 # desde el directorio /app/dist/ al directorio de html de Nginx
-COPY --from=build /app/dist/* /usr/share/nginx/html/
+COPY --from=build /app/dist/skills /usr/share/nginx/html/
 
 # Documenta que el contenedor escucha en el puerto 80
 EXPOSE 80
