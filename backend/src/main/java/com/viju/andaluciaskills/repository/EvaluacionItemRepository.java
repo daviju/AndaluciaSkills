@@ -14,5 +14,6 @@ public interface EvaluacionItemRepository extends JpaRepository<EvaluacionItem, 
 
     // Consulta todos los EvaluacionItem cuyo evaluacion_idEvaluacion coincida con un valor dado    
     @Query("SELECT evit FROM EvaluacionItem evit WHERE evit.evaluacion_idEvaluacion = :evaluacionId")
+    
     List<EvaluacionItem> findByEvaluacionIdEvaluacion(@Param("evaluacionId") Integer evaluacionId);
 }

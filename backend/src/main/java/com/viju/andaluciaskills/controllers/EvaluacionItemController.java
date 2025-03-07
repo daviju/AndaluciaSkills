@@ -184,27 +184,31 @@ public class EvaluacionItemController {
     })
 
     @PutMapping("/modificarEvaluacionItem/{id}")
-    public ResponseEntity<EvaluacionItemDTO> modificarEvaluacionItem(
-            @PathVariable Integer id, 
-            @RequestBody EvaluacionItemDTO evaluacionItemDTO) {
+    public ResponseEntity<EvaluacionItemDTO> modificarEvaluacionItem(@PathVariable Integer id, @RequestBody EvaluacionItemDTO evaluacionItemDTO) {
+        
         try {
             if (!id.equals(evaluacionItemDTO.getIdEvaluacionItem())) {
                 throw new EvaluacionItemBadRequestException("El ID del item no coincide con el ID proporcionado");
             }
+        
             return ResponseEntity.ok(
                 evaluacionItemService.findById(id)
                     .map(e -> {
+        
                         try {
                             evaluacionItemDTO.setIdEvaluacionItem(id);
                             return evaluacionItemService.save(evaluacionItemDTO);
+        
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                     })
                     .orElseThrow(() -> new EvaluacionItemNotFoundException(id))
             );
+        
         } catch (Exception e) {
             System.err.println("Error modificando item: " + e.getMessage());
+        
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error al modificar el item: " + e.getMessage());
         }

@@ -58,6 +58,7 @@ public class PruebaController {
     @Autowired
     private EvaluacionItemService evaluacionItemService;
 
+
     // BUSCAR TODAS LAS PRUEBAS
     @Operation(summary = "Buscar todas las pruebas", description = "Devuelve una lista con todas las pruebas")
 
@@ -71,6 +72,7 @@ public class PruebaController {
 
         return ResponseEntity.ok(pruebaService.findAll());
     }
+
 
     // BUSCAR PRUEBA POR ID
     @Operation(summary = "Buscar una prueba por su ID", description = "Busca una prueba mediante un ID proporcionado")
@@ -86,6 +88,7 @@ public class PruebaController {
         return ResponseEntity.ok(pruebaService.findById(id)
                 .orElseThrow(() -> new PruebaNotFoundException()));
     }
+
 
     // BUSCAR PRUEBAS POR ESPECIALIDAD
     @Operation(summary = "Buscar pruebas por especialidad", description = "Busca las pruebas de una especialidad mediante un ID proporcionado")
@@ -107,6 +110,7 @@ public class PruebaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     // CREAR PRUEBA
     @Operation(summary = "Crear una nueva prueba", description = "Crea una nueva prueba con los datos proporcionados")
@@ -130,6 +134,7 @@ public class PruebaController {
         }
     }
 
+
     // CREAR UNA PRUEBA CON ITEMS
     @Operation(summary = "Crear una nueva prueba con items", description = "Crea una nueva prueba con los items proporcionados")
 
@@ -149,7 +154,7 @@ public class PruebaController {
             List<ItemDTO> items = mapper.convertValue(
                     pruebaConItems.get("items"),
                     new TypeReference<List<ItemDTO>>() {
-                    });
+                });
 
             PruebaDTO pruebaCreada = pruebaService.crearPruebaItem(pruebaDTO, items);
 
@@ -160,6 +165,7 @@ public class PruebaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     // CREAR ITEMS DE UNA PRUEBA
     @Operation(summary = "Crear items de una prueba", description = "Crea items de una prueba con los datos proporcionados")
@@ -181,6 +187,7 @@ public class PruebaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     // MODIFICAR PRUEBA
     @Operation(summary = "Modificar una prueba", description = "Modifica una prueba con los datos proporcionados")
@@ -207,6 +214,7 @@ public class PruebaController {
                         .orElseThrow(() -> new PruebaNotFoundException(id)));
     }
 
+
     // ELIMINAR PRUEBA
     @Operation(summary = "Eliminar una prueba", description = "Elimina una prueba existente con el ID proporcionado")
 
@@ -224,6 +232,7 @@ public class PruebaController {
         pruebaService.delete(id);
         return ResponseEntity.ok().build();
     }
+
 
     // ACTUALIZAR VALORACIONES DE UNA EVALUACION
     @Operation(summary = "Actualizar valoraciones de una evaluacion", description = "Actualiza las valoraciones de una evaluacion con los datos proporcionados")
@@ -254,6 +263,7 @@ public class PruebaController {
         }
     }
 
+
     // CREAR EVALUACION
     @Operation(summary = "Crear una nueva evaluacion", description = "Crea una nueva evaluacion con los datos proporcionados")
 
@@ -278,13 +288,12 @@ public class PruebaController {
             boolean existeEvaluacion = pruebaService.existeEvaluacion(IdPrueba, IdParticipante);
 
             if (existeEvaluacion) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT,
-                        "Ya existe una evaluacion para la prueba proporcionada");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe una evaluacion para la prueba proporcionada");
             }
 
             // Si no existe, creamos la evaluacion y la devolvemos
-            EvaluacionDTO evaluacionCreada = evaluacionService.crearEvaluacion(IdPrueba, IdParticipante, IdUser,
-                    notaFinal);
+            EvaluacionDTO evaluacionCreada = evaluacionService.crearEvaluacion(IdPrueba, IdParticipante, IdUser, notaFinal);
+            
             return ResponseEntity.status(HttpStatus.CREATED).body(evaluacionCreada);
 
         } catch (Exception e) {
@@ -292,6 +301,7 @@ public class PruebaController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error al crear la evaluacion");
         }
     }
+
 
     // EXISTE EVALUACION?
     @Operation(summary = "Verificar si una evaluacion existe", description = "Verifica si una evaluacion existe con los datos proporcionados")
@@ -315,6 +325,7 @@ public class PruebaController {
         }
     }
 
+
     // BUSCAR PRUEBAS NO EVALUADAS DE UN PARTICIPANTE
     @Operation(summary = "Buscar evaluaciones por participante", description = "Busca las evaluaciones de un participante mediante un ID proporcionado")
 
@@ -324,19 +335,18 @@ public class PruebaController {
     })
 
     @GetMapping("/buscarPruebasNoEvaluadasPorParticipante/{idParticipante}/{idEspecialidad}")
-    public ResponseEntity<List<PruebaDTO>> buscarPruebasNoEvaluadasPorParticipante(
-            @PathVariable Integer idParticipante,
-            @PathVariable Integer idEspecialidad) {
+    public ResponseEntity<List<PruebaDTO>> buscarPruebasNoEvaluadasPorParticipante(@PathVariable Integer idParticipante, @PathVariable Integer idEspecialidad) {
 
         try {
-            List<PruebaDTO> pruebas = pruebaService.findPruebasNoEvaluadasByParticipante(idParticipante,
-                    idEspecialidad);
+            List<PruebaDTO> pruebas = pruebaService.findPruebasNoEvaluadasByParticipante(idParticipante, idEspecialidad);
             return ResponseEntity.ok(pruebas);
+        
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     // PDF PLANTILLA DE EVALUACION
     @Operation(summary = "Generar PDF con la plantilla de evaluacion", description = "Genera un PDF con la plantilla de evaluacion")

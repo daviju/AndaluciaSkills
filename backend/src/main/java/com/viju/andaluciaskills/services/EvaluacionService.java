@@ -297,6 +297,7 @@ public class EvaluacionService {
         
         // Procesamos cada resultado
         for (Map<String, Object> resultado : todosLosResultados) {
+            
             // Obtenemos los datos del resultado
             String especialidad = (String) resultado.get("especialidad");
             

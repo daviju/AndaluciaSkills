@@ -11,10 +11,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface EvaluacionRepository extends JpaRepository<Evaluacion, Integer> {
 
-       // Verificamos si existe una evaluación en la BD para una determinada prueba y
-       // un participante
+       // Verificamos si existe una evaluación para una prueba y un participante
        @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Evaluacion e " +
                      "WHERE e.prueba_idPrueba = :pruebaId AND e.participante_idParticipante = :participanteId")
+
        boolean existsByPruebaIdAndParticipanteId(@Param("pruebaId") Integer prueba_idPrueba,
                      @Param("participanteId") Integer participante_idParticipante);
 

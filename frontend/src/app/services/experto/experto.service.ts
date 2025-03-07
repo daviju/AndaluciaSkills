@@ -23,6 +23,7 @@ export class ExpertoService {
   }
 
   crearExperto(experto: any): Observable<any> {
+
     // Crear una copia limpia del objeto experto con solo los campos necesarios
     const expertoToSend = {
         username: experto.username.trim(),
